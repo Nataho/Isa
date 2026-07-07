@@ -7,7 +7,6 @@ extends Control
 @onready var placeholder: Control = $placeholder
 @onready var version_label: Label = $Version
 
-
 # ─── OSCILLATION CONFIGURATION ───
 var time: float = 0.0
 var base_y: float = 0.0

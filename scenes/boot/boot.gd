@@ -2,7 +2,7 @@ extends Control
 
 const SIMULATE_OFFLINE = false
 const JSON_URL = "https://nataho.github.io/Isa/patches.json"
-const BASE_VERSION = "0.1.12"
+const BASE_VERSION = "0.1.13"
 
 @onready var blink: Timer = $blink
 var _guide_transparent = false
@@ -37,6 +37,12 @@ var current_version: String = ""
 var currently_downloading_version: String = ""
 
 func _ready() -> void:
+	var acting_singletons := Dummy.get_children()
+	for singleton in acting_singletons:
+		singleton.free()
+		pass
+	await get_tree().process_frame
+	
 	_update_version_info()
 	progress_bar.hide()
 	blink.timeout.connect(_blink_guide)
