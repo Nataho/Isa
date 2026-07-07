@@ -1,5 +1,5 @@
 class_name WindowManager extends Node2D
-const FILE = "uid://cyamgc7dktii8"
+const FILE = "res://classes/WindowManager/WindowManager.tscn"
 static var inst:WindowManager = null
 
 static func spawn():

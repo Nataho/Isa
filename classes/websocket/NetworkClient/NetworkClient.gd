@@ -1,5 +1,5 @@
 class_name NetworkClient extends Node #Networkclient.gd
-const FILE = "uid://bsdwo4km1babq"
+const FILE = "res://classes/websocket/NetworkClient/NetworkClient.tscn"
 
 static var inst:NetworkClient = null
 

@@ -1,5 +1,5 @@
 class_name NetworkServer extends Node #NetworkServer.gd
-const FILE = "uid://bchcvd6uawwo5"
+const FILE = "res://classes/websocket/NetworkServer/NetworkServer.tscn"
 static var inst:NetworkServer = null
 
 static func spawn():

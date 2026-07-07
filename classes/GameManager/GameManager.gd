@@ -1,5 +1,5 @@
 class_name GameManager extends Node
-const FILE = "uid://ps4y6f5ul2l3"
+const FILE = "res://classes/GameManager/GameManager.tscn"
 
 static var inst:GameManager = null
 

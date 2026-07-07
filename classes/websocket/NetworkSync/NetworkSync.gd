@@ -1,5 +1,5 @@
 class_name NetworkSync extends Node #NetworkSync.gd
-const FILE = "uid://b2vy5bb71104u"
+const FILE = "res://classes/websocket/NetworkSync/NetworkSync.tscn"
 
 static var inst:NetworkSync = null
 

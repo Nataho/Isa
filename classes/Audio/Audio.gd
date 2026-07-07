@@ -1,5 +1,5 @@
 class_name Audio extends Node
-const FILE = "uid://bg1jiq5h0e705"
+const FILE = "res://classes/Audio/Audio.tscn"
 
 static var inst:Audio = null
 

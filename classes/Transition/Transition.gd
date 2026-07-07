@@ -1,5 +1,5 @@
 class_name Transition extends CanvasLayer
-const FILE = "uid://dh51goui3fva0"
+const FILE = "res://classes/Transition/Transition.tscn"
 static var inst: Transition = null
 
 static func spawn():
