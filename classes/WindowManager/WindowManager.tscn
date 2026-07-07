@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cyamgc7dktii8"]
+
+[ext_resource type="Script" uid="uid://bbffj3xmvmhrm" path="res://classes/WindowManager/window_manager.gd" id="1_g4cp2"]
+
+[node name="WindowManager" type="Node2D" unique_id=1197827095]
+script = ExtResource("1_g4cp2")

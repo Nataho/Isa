@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://bl30eftap0qmq"]
+
+[ext_resource type="Script" uid="uid://cg25ttpv1oulk" path="res://scenes/boot/boot.gd" id="1_4qrgx"]
+[ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="2_cp6y4"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vxpyd"]
+font = ExtResource("2_cp6y4")
+font_size = 80
+
+[node name="Boot" type="Control" unique_id=1738996520]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_4qrgx")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=120394247]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=1110923113]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -550.0
+offset_top = 38.0
+offset_right = 550.0
+offset_bottom = 83.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_cp6y4")
+theme_override_font_sizes/font_size = 40
+
+[node name="StatusLabel" type="Label" parent="." unique_id=1130918974]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -11.5
+offset_right = 20.0
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "MESSAGE"
+label_settings = SubResource("LabelSettings_vxpyd")
+horizontal_alignment = 1
+vertical_alignment = 1
+uppercase = true
+
+[node name="UpdaterHTTP" type="HTTPRequest" parent="." unique_id=1745090038]

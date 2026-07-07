@@ -1,0 +1,136 @@
+[gd_scene format=3 uid="uid://cekq182icrfya"]
+
+[ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="1_bvmdu"]
+[ext_resource type="Script" uid="uid://bipnw5xr52c5t" path="res://scenes/Main/main.gd" id="1_owiiy"]
+[ext_resource type="PackedScene" uid="uid://c3fvu61ft2tex" path="res://classes/Card/Card.tscn" id="4_brr1f"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vxpyd"]
+font = ExtResource("1_bvmdu")
+font_size = 160
+outline_size = 40
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vxpyd"]
+bg_color = Color(1, 0, 0.32156864, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32lhq"]
+bg_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_csduv"]
+bg_color = Color(0, 0.7764706, 0.5529412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hww3l"]
+bg_color = Color(0, 0.33333334, 0.85490197, 1)
+
+[node name="Main" type="Control" unique_id=3424816]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_owiiy")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1417441472]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09019608, 0.08235294, 0.23137255, 1)
+
+[node name="title" type="Label" parent="." unique_id=1373103080]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 309.0
+offset_top = 81.0
+offset_right = 643.0
+offset_bottom = 242.0
+grow_horizontal = 2
+text = "ISA!"
+label_settings = SubResource("LabelSettings_vxpyd")
+
+[node name="buttons" type="VBoxContainer" parent="." unique_id=1099123919]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 134.0
+offset_top = -306.0
+offset_right = 734.0
+offset_bottom = 306.0
+grow_vertical = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="join" type="Button" parent="buttons" unique_id=24801130]
+custom_minimum_size = Vector2(600, 150)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_bvmdu")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_vxpyd")
+text = "JOIN"
+
+[node name="host" type="Button" parent="buttons" unique_id=1577507128]
+custom_minimum_size = Vector2(600, 150)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_bvmdu")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_32lhq")
+text = "HOST"
+
+[node name="settings" type="Button" parent="buttons" unique_id=936355540]
+custom_minimum_size = Vector2(600, 150)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_bvmdu")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_csduv")
+text = "SETTINGS"
+
+[node name="quit" type="Button" parent="buttons" unique_id=1372376685]
+custom_minimum_size = Vector2(600, 150)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_bvmdu")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = SubResource("StyleBoxFlat_hww3l")
+text = "QUIT"
+
+[node name="Card" parent="." unique_id=1861548578 instance=ExtResource("4_brr1f")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1765.0
+offset_top = 58.0
+offset_right = 1765.0
+offset_bottom = 58.0
+grow_horizontal = 2
+grow_vertical = 2
+is_ui_button = true
+card_color = 6
+card_type = 13
+
+[node name="placeholder" type="Control" parent="." unique_id=1800140179]
+custom_maximum_size = Vector2(0, 0)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 474.0
+offset_top = 90.0
+offset_right = 474.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)

@@ -1,0 +1,157 @@
+[gd_scene format=3 uid="uid://b7pgaw88m4b6r"]
+
+[ext_resource type="Script" uid="uid://kokjkgva8ckt" path="res://scenes/Multiplayer/Search/search.gd" id="1_k0cj2"]
+[ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="1_q2vqp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_k0cj2"]
+bg_color = Color(1, 0, 0.32156864, 1)
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_knmpy"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_knmpy"]
+bg_color = Color(0, 0.33333334, 0.85490197, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vxpyd"]
+font = ExtResource("1_q2vqp")
+font_size = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kbi0f"]
+bg_color = Color(0, 0.7764706, 0.5529412, 1)
+
+[node name="Search" type="Control" unique_id=1416099183]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_k0cj2")
+
+[node name="bg" type="ColorRect" parent="." unique_id=617711407]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.18039216, 0.13725491, 0.42352942, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1935391718]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1223038058]
+layout_mode = 2
+
+[node name="Buttons" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=10170683]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="LANButton" type="Button" parent="MarginContainer/HBoxContainer/Buttons" unique_id=836358470]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_q2vqp")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_k0cj2")
+toggle_mode = true
+button_pressed = true
+button_group = SubResource("ButtonGroup_knmpy")
+text = "LAN"
+
+[node name="DirectButton" type="Button" parent="MarginContainer/HBoxContainer/Buttons" unique_id=2016321265]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_q2vqp")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_knmpy")
+toggle_mode = true
+button_group = SubResource("ButtonGroup_knmpy")
+text = "DIRECT"
+
+[node name="hostsPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=526464550]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="hosts" type="VBoxContainer" parent="MarginContainer/HBoxContainer/hostsPanel" unique_id=731092856]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="directPanel" type="PanelContainer" parent="MarginContainer/HBoxContainer" unique_id=1905598642]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/directPanel" unique_id=1941041742]
+layout_mode = 2
+
+[node name="ip_field" type="LineEdit" parent="MarginContainer/HBoxContainer/directPanel/Control" unique_id=1070208077]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -678.0
+offset_top = -74.0
+offset_right = 678.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_q2vqp")
+theme_override_font_sizes/font_size = 80
+placeholder_text = "192.168.1.x"
+alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/directPanel/Control" unique_id=545786163]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -125.0
+offset_right = 20.0
+offset_bottom = -102.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Enter IP Address of host"
+label_settings = SubResource("LabelSettings_vxpyd")
+
+[node name="connect" type="Button" parent="MarginContainer/HBoxContainer/directPanel/Control" unique_id=1449073921]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -193.0
+offset_top = 98.0
+offset_right = 193.0
+offset_bottom = 178.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_q2vqp")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_kbi0f")
+toggle_mode = true
+text = "CONNECT"

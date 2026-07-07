@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://dttfkvs2j6lxn"]
+
+[ext_resource type="Script" uid="uid://buhq35s3weio0" path="res://scenes/test/game/game.gd" id="1_wx5ug"]
+[ext_resource type="PackedScene" uid="uid://c3fvu61ft2tex" path="res://classes/Card/Card.tscn" id="2_nwjd5"]
+[ext_resource type="Texture2D" uid="uid://v1e503tvhd3c" path="res://assets/images/turn_direction.svg" id="2_ubanp"]
+[ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="4_ubanp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_nwjd5"]
+font = ExtResource("4_ubanp")
+font_size = 40
+
+[sub_resource type="LabelSettings" id="LabelSettings_vxpyd"]
+font = ExtResource("4_ubanp")
+font_size = 40
+
+[node name="Game" type="Control" unique_id=1261132507]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wx5ug")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1960973421]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.29411766, 0.078431375, 0.14901961, 1)
+
+[node name="pile" type="Control" parent="." unique_id=1962793423]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="turn_direction" type="TextureRect" parent="." unique_id=151304911]
+modulate = Color(1, 1, 1, 0.09019608)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -449.0
+offset_top = -490.0
+offset_right = 449.0
+offset_bottom = 490.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(449, 490)
+texture = ExtResource("2_ubanp")
+
+[node name="deck" parent="." unique_id=877133404 instance=ExtResource("2_nwjd5")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -400.0
+offset_right = -400.0
+grow_horizontal = 2
+grow_vertical = 2
+is_ui_button = true
+card_color = 5
+
+[node name="cards_left" type="Label" parent="deck" unique_id=319250200]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -120.0
+offset_top = -228.0
+offset_right = 120.0
+offset_bottom = -143.0
+grow_horizontal = 2
+text = "cards left:
+0"
+label_settings = SubResource("LabelSettings_nwjd5")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Card" parent="." unique_id=1861548578 instance=ExtResource("2_nwjd5")]
+z_index = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = -322.0
+offset_bottom = -322.0
+grow_horizontal = 2
+is_ui_button = true
+card_color = 6
+
+[node name="win" type="Control" parent="." unique_id=1480261585]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(3, 3)
+
+[node name="Timer" type="Timer" parent="." unique_id=2069622425]
+wait_time = 10.0
+
+[node name="turn_time_label" type="Label" parent="." unique_id=249435648]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 272.5
+offset_top = -42.5
+offset_right = 527.5
+offset_bottom = 42.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "TURN TIME:
+0s"
+label_settings = SubResource("LabelSettings_vxpyd")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="turn_timer" type="Timer" parent="." unique_id=1787677204]

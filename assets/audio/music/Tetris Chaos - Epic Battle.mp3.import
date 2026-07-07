@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://l7cytvv1yxku"
+path="res://.godot/imported/Tetris Chaos - Epic Battle.mp3-bdcee059161c39ecc644194b481fd606.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/music/Tetris Chaos - Epic Battle.mp3"
+dest_files=["res://.godot/imported/Tetris Chaos - Epic Battle.mp3-bdcee059161c39ecc644194b481fd606.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=504.0
+bpm=119.96
+beat_count=1227
+bar_beats=4

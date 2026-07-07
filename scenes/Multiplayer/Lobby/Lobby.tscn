@@ -1,0 +1,81 @@
+[gd_scene format=3 uid="uid://dabv2ovv6ckqo"]
+
+[ext_resource type="Script" uid="uid://dyvpako6bqgy2" path="res://scenes/Multiplayer/Lobby/lobby.gd" id="1_tnkfs"]
+[ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="2_gxw8m"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxw8m"]
+bg_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vxpyd"]
+font = ExtResource("2_gxw8m")
+font_size = 40
+
+[node name="Lobby" type="Control" unique_id=645984114]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tnkfs")
+
+[node name="bg" type="ColorRect" parent="." unique_id=1135560922]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.18039216, 0.13725491, 0.42352942, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=390115177]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1353836223]
+layout_mode = 2
+
+[node name="players" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1226034398]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer" unique_id=335901717]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GameButtons" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=2008039327]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="ReadyButton" type="Button" parent="MarginContainer/HBoxContainer/GameButtons" unique_id=253953559]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gxw8m")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_gxw8m")
+text = "Ready"
+
+[node name="HSeparator" type="HSeparator" parent="MarginContainer/HBoxContainer/GameButtons" unique_id=2087516977]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 27
+
+[node name="time_label" type="Label" parent="MarginContainer/HBoxContainer/GameButtons" unique_id=910726228]
+layout_mode = 2
+text = "Time Left:
+120s"
+label_settings = SubResource("LabelSettings_vxpyd")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=634325765]

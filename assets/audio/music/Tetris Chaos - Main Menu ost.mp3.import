@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://chgg3ih250ewi"
+path="res://.godot/imported/Tetris Chaos - Main Menu ost.mp3-2b3d545058d9d94f84666c4c43735051.mp3str"
+
+[deps]
+
+source_file="res://assets/audio/music/Tetris Chaos - Main Menu ost.mp3"
+dest_files=["res://.godot/imported/Tetris Chaos - Main Menu ost.mp3-2b3d545058d9d94f84666c4c43735051.mp3str"]
+
+[params]
+
+loop=true
+loop_offset=0.65
+bpm=127.65
+beat_count=74
+bar_beats=4

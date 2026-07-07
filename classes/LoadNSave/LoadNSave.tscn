@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bwumusu051vr8"]
+
+[ext_resource type="Script" uid="uid://dbdigs2tsxyuf" path="res://classes/LoadNSave/LoadNSave.gd" id="1_uj05e"]
+
+[node name="LoadNSave" type="Node" unique_id=535239300]
+script = ExtResource("1_uj05e")

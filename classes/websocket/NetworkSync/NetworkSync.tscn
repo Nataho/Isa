@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b2vy5bb71104u"]
+
+[ext_resource type="Script" uid="uid://83gaja47qi1m" path="res://classes/websocket/NetworkSync/NetworkSync.gd" id="1_gijrm"]
+
+[node name="NetworkSync" type="Node" unique_id=871601754]
+script = ExtResource("1_gijrm")

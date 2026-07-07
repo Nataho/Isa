@@ -1,0 +1,7 @@
+[gd_resource type="LabelSettings" format=3 uid="uid://ox0kiicrcoi7"]
+
+[ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="1_ukbk1"]
+
+[resource]
+font = ExtResource("1_ukbk1")
+font_size = 40

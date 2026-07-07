@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://be28gdldmcap0"]
+
+[ext_resource type="Script" uid="uid://4ajo8sdipkoi" path="res://scenes/test/test.gd" id="1_m7npr"]
+
+[node name="Test" type="Control" unique_id=363141511]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_m7npr")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1013812356]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="host" type="Button" parent="HBoxContainer" unique_id=1695803601]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "HOST"
+
+[node name="join" type="Button" parent="HBoxContainer" unique_id=1274508349]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "JOIN"
+
+[node name="communicate" type="Button" parent="." unique_id=1907906203]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -139.0
+offset_top = -127.0
+offset_right = 139.0
+offset_bottom = -64.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 40
+text = "Communicate"
+
+[connection signal="pressed" from="HBoxContainer/host" to="." method="host"]
+[connection signal="pressed" from="HBoxContainer/join" to="." method="join"]
+[connection signal="pressed" from="communicate" to="." method="communicate"]

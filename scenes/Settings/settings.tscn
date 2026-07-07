@@ -1,0 +1,330 @@
+[gd_scene format=3 uid="uid://bv3h36ydpflj"]
+
+[ext_resource type="Script" uid="uid://cg41wvjhly8os" path="res://scenes/Settings/settings.gd" id="1_bpxx6"]
+[ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="1_esjpb"]
+[ext_resource type="ButtonGroup" uid="uid://c2j0uwq5olbuc" path="res://resource/settings_button_group.tres" id="2_sdsud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vxpyd"]
+bg_color = Color(1, 0, 0.32156864, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_32lhq"]
+bg_color = Color(1, 0.83137256, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_csduv"]
+bg_color = Color(0, 0.7764706, 0.5529412, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hww3l"]
+bg_color = Color(0, 0.33333334, 0.85490197, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bpxx6"]
+bg_color = Color(0.8, 0, 0.2533333, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_32lhq"]
+font = ExtResource("1_esjpb")
+font_size = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rpd78"]
+content_margin_left = 4.0
+content_margin_top = 10.0
+content_margin_right = 4.0
+content_margin_bottom = 10.0
+bg_color = Color(0.1, 0.1, 0.1, 0.6)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gq4r6"]
+bg_color = Color(0.8, 0.6666667, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1q6jj"]
+bg_color = Color(0, 0.58, 0.41566667, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_vxpyd"]
+font = ExtResource("1_esjpb")
+font_size = 80
+outline_size = 40
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n4ll7"]
+bg_color = Color(0, 0.33333334, 0.85490197, 1)
+
+[node name="Settings" type="Control" unique_id=1658470190]
+z_index = 10
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_bpxx6")
+
+[node name="bg" type="ColorRect" parent="." unique_id=1556238177]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.18039216, 0.13725491, 0.42352942, 1)
+
+[node name="PanelManager" type="MarginContainer" parent="." unique_id=1716138923]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 50
+theme_override_constants/margin_top = 50
+theme_override_constants/margin_right = 50
+theme_override_constants/margin_bottom = 50
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PanelManager" unique_id=1306047462]
+layout_mode = 2
+
+[node name="Buttons" type="VBoxContainer" parent="PanelManager/HBoxContainer" unique_id=2049468632]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="AudioButton" type="Button" parent="PanelManager/HBoxContainer/Buttons" unique_id=265888943]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_esjpb")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_vxpyd")
+toggle_mode = true
+button_pressed = true
+button_group = ExtResource("2_sdsud")
+text = "AUDIO"
+
+[node name="GraphicsButton" type="Button" parent="PanelManager/HBoxContainer/Buttons" unique_id=417671210]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_esjpb")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_32lhq")
+toggle_mode = true
+button_group = ExtResource("2_sdsud")
+text = "GRAPHICS"
+
+[node name="NetworkButton" type="Button" parent="PanelManager/HBoxContainer/Buttons" unique_id=2136530307]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_esjpb")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_csduv")
+toggle_mode = true
+button_group = ExtResource("2_sdsud")
+text = "NETWORK"
+
+[node name="UserButton" type="Button" parent="PanelManager/HBoxContainer/Buttons" unique_id=1943114990]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_esjpb")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_hww3l")
+toggle_mode = true
+button_group = ExtResource("2_sdsud")
+text = "USER"
+
+[node name="AudioPanel" type="PanelContainer" parent="PanelManager/HBoxContainer" unique_id=1630988313]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_bpxx6")
+
+[node name="Control" type="Control" parent="PanelManager/HBoxContainer/AudioPanel" unique_id=1224273127]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelManager/HBoxContainer/AudioPanel/Control" unique_id=877538628]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -415.0
+offset_top = -191.5
+offset_right = 415.0
+offset_bottom = 191.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="master_vol" type="Label" parent="PanelManager/HBoxContainer/AudioPanel/Control/VBoxContainer" unique_id=1887479461]
+unique_name_in_owner = true
+layout_mode = 2
+text = "MASTER VOLUME"
+label_settings = SubResource("LabelSettings_32lhq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="master_slider" type="HSlider" parent="PanelManager/HBoxContainer/AudioPanel/Control/VBoxContainer" unique_id=356972472]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxFlat_rpd78")
+min_value = -30.0
+max_value = 0.0
+step = 0.1
+tick_count = 20
+ticks_position = 3
+
+[node name="HSeparator" type="HSeparator" parent="PanelManager/HBoxContainer/AudioPanel/Control/VBoxContainer" unique_id=1012745807]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 80
+
+[node name="music_vol" type="Label" parent="PanelManager/HBoxContainer/AudioPanel/Control/VBoxContainer" unique_id=160661020]
+unique_name_in_owner = true
+layout_mode = 2
+text = "MUSIC VOLUME"
+label_settings = SubResource("LabelSettings_32lhq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="music_slider" type="HSlider" parent="PanelManager/HBoxContainer/AudioPanel/Control/VBoxContainer" unique_id=609230421]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxFlat_rpd78")
+min_value = -30.0
+max_value = 0.0
+step = 0.1
+tick_count = 20
+ticks_position = 3
+
+[node name="HSeparator2" type="HSeparator" parent="PanelManager/HBoxContainer/AudioPanel/Control/VBoxContainer" unique_id=190315015]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+theme_override_constants/separation = 80
+
+[node name="sfx_vol" type="Label" parent="PanelManager/HBoxContainer/AudioPanel/Control/VBoxContainer" unique_id=1851311281]
+unique_name_in_owner = true
+layout_mode = 2
+text = "SFX VOLUME"
+label_settings = SubResource("LabelSettings_32lhq")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="sfx_slider" type="HSlider" parent="PanelManager/HBoxContainer/AudioPanel/Control/VBoxContainer" unique_id=1974228707]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_styles/slider = SubResource("StyleBoxFlat_rpd78")
+min_value = -30.0
+max_value = 0.0
+step = 0.1
+tick_count = 20
+ticks_position = 3
+
+[node name="GraphicsPanel" type="PanelContainer" parent="PanelManager/HBoxContainer" unique_id=1384027119]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_gq4r6")
+
+[node name="NetworkPanel" type="PanelContainer" parent="PanelManager/HBoxContainer" unique_id=1654922501]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_1q6jj")
+
+[node name="Control" type="Control" parent="PanelManager/HBoxContainer/NetworkPanel" unique_id=11596209]
+layout_mode = 2
+
+[node name="subnet_field" type="LineEdit" parent="PanelManager/HBoxContainer/NetworkPanel/Control" unique_id=1945226624]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -462.0
+offset_top = -74.00003
+offset_right = 462.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_esjpb")
+theme_override_font_sizes/font_size = 80
+text = "10.147.17.255"
+placeholder_text = "255.255.255.255"
+alignment = 1
+max_length = 15
+
+[node name="Label" type="Label" parent="PanelManager/HBoxContainer/NetworkPanel/Control" unique_id=1450065302]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -247.0
+offset_top = -175.0
+offset_right = 247.0
+offset_bottom = -94.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "SUBNET"
+label_settings = SubResource("LabelSettings_vxpyd")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="UserPanel" type="PanelContainer" parent="PanelManager/HBoxContainer" unique_id=1218519548]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_n4ll7")
+
+[node name="Control" type="Control" parent="PanelManager/HBoxContainer/UserPanel" unique_id=1956202177]
+layout_mode = 2
+
+[node name="player_username" type="LineEdit" parent="PanelManager/HBoxContainer/UserPanel/Control" unique_id=905178294]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -462.0
+offset_top = -74.00003
+offset_right = 462.0
+offset_bottom = 74.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("1_esjpb")
+theme_override_font_sizes/font_size = 80
+placeholder_text = "Enter Username"
+alignment = 1
+max_length = 15
+
+[node name="Label" type="Label" parent="PanelManager/HBoxContainer/UserPanel/Control" unique_id=1303059513]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -247.0
+offset_top = -175.0
+offset_right = 247.0
+offset_bottom = -94.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "USERNAME"
+label_settings = SubResource("LabelSettings_vxpyd")

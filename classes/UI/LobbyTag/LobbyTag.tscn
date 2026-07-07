@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://c1ke1cnxmpus7"]
+
+[ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="1_go3ab"]
+[ext_resource type="Script" uid="uid://cs4whdjqdalpu" path="res://classes/UI/LobbyTag/lobby_tag.gd" id="2_csj2f"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hn468"]
+bg_color = Color(0, 0.33333334, 0.85490197, 1)
+
+[node name="LobbyTag" type="Button" unique_id=1935592940]
+custom_minimum_size = Vector2(0, 80)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("1_go3ab")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_hn468")
+text = "PLAYER"
+script = ExtResource("2_csj2f")

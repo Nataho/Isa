@@ -1,0 +1,185 @@
+[gd_scene format=3 uid="uid://c3fvu61ft2tex"]
+
+[ext_resource type="Script" uid="uid://cqaovx7juk6aq" path="res://classes/Card/Card.gd" id="1_0haaq"]
+[ext_resource type="Texture2D" uid="uid://8udwy6avg22w" path="res://assets/images/card_border.png" id="2_0it4w"]
+[ext_resource type="FontFile" uid="uid://3w2bdpwnvjqo" path="res://assets/fonts/ari_w9500/ari-w9500-bold.ttf" id="3_uv4vl"]
+[ext_resource type="Texture2D" uid="uid://dqqk6mkh1amna" path="res://assets/images/card_reverse.png" id="4_xo4l7"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_vxpyd"]
+font = ExtResource("3_uv4vl")
+font_size = 120
+outline_size = 12
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_jfquc"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_uv4vl"]
+resource_name = "fall"
+length = 0.5
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.27739283, 1),
+"update": 0,
+"values": [Vector2(0, -48), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_xo4l7"]
+resource_name = "rise"
+length = 0.5
+step = 0.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(0.0743257, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -48)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_jfquc"]
+_data = {
+&"RESET": SubResource("Animation_jfquc"),
+&"fall": SubResource("Animation_uv4vl"),
+&"rise": SubResource("Animation_xo4l7")
+}
+
+[node name="Card" type="Control" unique_id=1861548578]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_0haaq")
+
+[node name="body" type="Control" parent="." unique_id=64456358]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="base" type="ColorRect" parent="body" unique_id=1641757093]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -83.0
+offset_top = -123.48781
+offset_right = 83.0
+offset_bottom = 123.48781
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.95, 0.91833335, 0, 1)
+
+[node name="border" type="TextureRect" parent="body" unique_id=438570157]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -136.0
+offset_right = 96.0
+offset_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_0it4w")
+
+[node name="card_display" type="Label" parent="body" unique_id=730274538]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -58.0
+offset_top = -58.0
+offset_right = 48.0
+offset_bottom = 83.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0"
+label_settings = SubResource("LabelSettings_vxpyd")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="card_action" type="TextureRect" parent="body" unique_id=20003899]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -136.0
+offset_right = 96.0
+offset_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xo4l7")
+
+[node name="mouse_listener" type="Control" parent="." unique_id=1073033281]
+custom_minimum_size = Vector2(192, 272)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -136.0
+offset_right = 96.0
+offset_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="border" type="TextureRect" parent="mouse_listener" unique_id=248410743]
+visible = false
+modulate = Color(1, 0.00999999, 0.00999999, 1)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -96.0
+offset_top = -136.0
+offset_right = 96.0
+offset_bottom = 136.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_0it4w")
+
+[node name="anim" type="AnimationPlayer" parent="." unique_id=300561806]
+libraries/ = SubResource("AnimationLibrary_jfquc")

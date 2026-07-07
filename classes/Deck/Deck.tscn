@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cr8ihyg68ii44"]
+
+[ext_resource type="Script" uid="uid://cdea3x43ejt3g" path="res://classes/Deck/Deck.gd" id="1_l6idj"]
+
+[node name="Deck" type="Node" unique_id=175483383]
+script = ExtResource("1_l6idj")

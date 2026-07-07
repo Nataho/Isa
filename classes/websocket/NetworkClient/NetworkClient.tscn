@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bsdwo4km1babq"]
+
+[ext_resource type="Script" uid="uid://dc67rlssr3w4t" path="res://classes/websocket/NetworkClient/NetworkClient.gd" id="1_6e0nw"]
+
+[node name="NetworkClient" type="Node" unique_id=205565745]
+script = ExtResource("1_6e0nw")
+
+[node name="Timer" type="Timer" parent="." unique_id=42518134]

@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dkdwl6v03n5ce"]
+
+[ext_resource type="Script" uid="uid://dnx3epf8pejms" path="res://classes/Hand/NetworkHand/NetworkHand.gd" id="1_q70er"]
+
+[node name="NetworkHand" type="Control" unique_id=1097492394]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_q70er")
+
+[node name="cards" type="HBoxContainer" parent="." unique_id=173152511]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -210.0
+offset_right = 20.0
+offset_bottom = -170.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 40
+alignment = 1

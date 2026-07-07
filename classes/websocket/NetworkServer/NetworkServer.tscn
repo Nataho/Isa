@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://bchcvd6uawwo5"]
+
+[ext_resource type="Script" uid="uid://k0cb8sm1wkh3" path="res://classes/websocket/NetworkServer/NetworkServer.gd" id="1_h2ily"]
+
+[node name="NetworkServer" type="Node" unique_id=435604807]
+script = ExtResource("1_h2ily")

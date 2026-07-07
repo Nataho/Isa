@@ -1,0 +1,134 @@
+[gd_scene format=3 uid="uid://bd67yh2f44pv5"]
+
+[ext_resource type="Script" uid="uid://djl2qw5itqgi5" path="res://classes/UI/ColorPrompt/ColorPrompt.gd" id="1_qenp1"]
+[ext_resource type="PackedScene" uid="uid://c3fvu61ft2tex" path="res://classes/Card/Card.tscn" id="2_4urnq"]
+
+[node name="ColorPrompt" type="Panel" unique_id=200676894]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qenp1")
+
+[node name="red" parent="." unique_id=1861548578 instance=ExtResource("2_4urnq")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+is_ui_button = true
+expand_on_hovered = false
+
+[node name="yellow" parent="." unique_id=252184844 instance=ExtResource("2_4urnq")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+is_ui_button = true
+expand_on_hovered = false
+card_color = 1
+
+[node name="green" parent="." unique_id=7408329 instance=ExtResource("2_4urnq")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+is_ui_button = true
+expand_on_hovered = false
+card_color = 2
+
+[node name="blue" parent="." unique_id=885988927 instance=ExtResource("2_4urnq")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+is_ui_button = true
+expand_on_hovered = false
+card_color = 3
+
+[node name="skip" parent="." unique_id=1786323778 instance=ExtResource("2_4urnq")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+is_ui_button = true
+expand_on_hovered = false
+card_color = 4
+card_type = 10
+
+[node name="hand" type="HBoxContainer" parent="." unique_id=2024520524]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -336.0
+offset_top = -34.0
+offset_right = 336.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 160
+alignment = 1
+
+[node name="red" type="Control" parent="hand" unique_id=17051873]
+custom_minimum_size = Vector2(48, 68)
+custom_maximum_size = Vector2(48, 68)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="yellow" type="Control" parent="hand" unique_id=1790201079]
+custom_minimum_size = Vector2(48, 68)
+custom_maximum_size = Vector2(48, 68)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="green" type="Control" parent="hand" unique_id=1084921856]
+custom_minimum_size = Vector2(48, 68)
+custom_maximum_size = Vector2(48, 68)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="blue" type="Control" parent="hand" unique_id=566547304]
+custom_minimum_size = Vector2(48, 68)
+custom_maximum_size = Vector2(48, 68)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="skip" type="Control" parent="hand" unique_id=1020880930]
+custom_minimum_size = Vector2(48, 68)
+custom_maximum_size = Vector2(48, 68)
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Control" type="Control" parent="." unique_id=588348151]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2

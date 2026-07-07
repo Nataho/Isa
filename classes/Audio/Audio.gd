@@ -1,0 +1,185 @@
+class_name Audio
+extends Node
+
+# The acting autoload instance
+static var active_node: Audio
+
+enum SOUND_END_EFFECTS {NONE, FADE, VINYL}
+enum SOUND_START_EFFECTS {NONE, FADE}
+
+var music_player_node: AudioStreamPlayer
+
+var stop_tween: Tween
+var start_tween: Tween
+
+const sound := {
+	#sound name: [sound file, decibels]
+	"hover" : [preload("uid://du1gpeh7ocjna"), 0],
+	"confirm1": [preload("uid://ctnkg31uo1nu7"), 0],
+	"confirm2": [preload("uid://exuq8wros3g"), 0],
+	"confirm3": [preload("uid://dujj0q8vpaag"), 0],
+	
+	"drawed": [preload("uid://b1m6dyhegke0p"), 0],
+	"skip": [preload("uid://cj0nf4f4augbf"), 0],
+}
+
+const music := {
+	"main": [preload("uid://cj1gchuspy58a"), -5],
+	"lobby": [preload("uid://fcwr7jp08usi"), 0],
+	"victory": [preload("uid://q8xk1oxbh730"), 0], #FIXME: replace this lol
+	"battle": [preload("uid://l7cytvv1yxku"), 0], #FIXME: replace me
+}
+
+const MASTER_BUS = "Master"
+const SFX_BUS = "Sfx"
+const MUSIC_BUS = "Music"
+
+func _enter_tree() -> void:
+	# Set the static reference to THIS node when it enters the scene
+	active_node = self
+	music_player_node = AudioStreamPlayer.new()
+	add_child(music_player_node)
+
+# ==========================================
+# STATIC WRAPPERS (Call these from anywhere!)
+# ==========================================
+
+static func play_sound(sound_key: String, offset: float = 0.0) -> void:
+	if is_instance_valid(active_node):
+		active_node._play_sound(sound_key, offset)
+
+static func play_music(music_key: String, end_effect: SOUND_END_EFFECTS = SOUND_END_EFFECTS.NONE, start_effect: SOUND_START_EFFECTS = SOUND_START_EFFECTS.NONE) -> void:
+	if is_instance_valid(active_node):
+		active_node._play_music(music_key, end_effect, start_effect)
+
+
+# ==========================================
+# INSTANCE METHODS (The actual logic)
+# ==========================================
+
+func _play_sound(sound_key: String, offset: float) -> void:
+	if sound_key not in sound.keys(): 
+		push_error("sound not found: ", sound_key)
+		return
+		
+	var sfx := AudioStreamPlayer.new()
+	sfx.stream = sound[sound_key][0]
+	sfx.volume_db = sound[sound_key][1]
+	sfx.bus = &"Sfx"
+	
+	add_child(sfx)
+	sfx.play(offset)
+	await sfx.finished
+	sfx.queue_free()
+
+func _play_music(music_key: String, end_effect: SOUND_END_EFFECTS, start_effect: SOUND_START_EFFECTS) -> void:
+	music_player_node.bus = &"Music"
+	if not music.has(music_key):
+		push_error("The sound key is not found in the dictionary: ", music_key)
+		return
+	
+	var loaded_file = music[music_key][0]
+	var target_volume = music[music_key][1]
+	
+	# If this exact track is already playing, don't restart it
+	if music_player_node.stream == loaded_file and music_player_node.playing:
+		return
+		
+	# 1. Handle the END effect
+	if music_player_node.playing:
+		if end_effect == SOUND_END_EFFECTS.VINYL:
+			await _trigger_vinyl_stop(2.0)
+		elif end_effect == SOUND_END_EFFECTS.FADE:
+			await _trigger_fade_out(1.5)
+		else:
+			music_player_node.stop()
+				
+	# 2. Setup the NEW track
+	music_player_node.stream = loaded_file
+	music_player_node.pitch_scale = 1.0 
+	
+	# 3. Handle the START effect
+	if start_effect == SOUND_START_EFFECTS.FADE:
+		music_player_node.volume_db = -80.0 
+		music_player_node.play()
+		_trigger_fade_in(target_volume, 1.5)
+	else:
+		music_player_node.volume_db = target_volume
+		music_player_node.play()
+		
+	print("Now playing: ", music_key)
+	print("is playing?: ", music_player_node.playing)
+
+func _trigger_fade_out(duration: float = 1.5) -> void:
+	if stop_tween and stop_tween.is_running():
+		stop_tween.kill()
+		
+	stop_tween = create_tween()
+	stop_tween.tween_property(music_player_node, "volume_db", -80.0, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	
+	stop_tween.tween_callback(func():
+		music_player_node.stop()
+	)
+	
+	await stop_tween.finished
+
+func _trigger_fade_in(target_volume: float, duration: float = 1.5) -> void:
+	if start_tween and start_tween.is_running():
+		start_tween.kill()
+		
+	start_tween = create_tween()
+	start_tween.tween_property(music_player_node, "volume_db", target_volume, duration).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+
+func _trigger_vinyl_stop(duration: float = 20.0) -> void:
+	if stop_tween and stop_tween.is_running():
+		stop_tween.kill()
+		
+	stop_tween = create_tween().set_parallel(true)
+	
+	# Slide pitch down to 0.01 (Godot crashes at exactly 0.0)
+	stop_tween.tween_property(music_player_node, "pitch_scale", 0.01, duration).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	# Slide volume down to silence (-80.0 db)
+	stop_tween.tween_property(music_player_node, "volume_db", -80.0, duration).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+	
+	stop_tween.chain().tween_callback(func():
+		music_player_node.stop()
+		music_player_node.pitch_scale = 1.0 # Reset pitch for the next track
+	)
+	
+	await stop_tween.finished
+
+static func set_bus_volume(bus_name: String, volume_db: float) -> void:
+	if is_instance_valid(active_node):
+		active_node._set_bus_volume(bus_name, volume_db)
+
+func _set_bus_volume(bus_name: String, volume_db: float) -> void:
+	# Find the ID of the bus by its name (e.g., "Master", "Music", "Sfx")
+	var bus_idx = AudioServer.get_bus_index(bus_name)
+	
+	GameManager.inst.sound_settings[bus_name] = volume_db
+	
+	if bus_idx == -1:
+		push_error("Audio bus not found: ", bus_name)
+		return
+		
+	# If volume is -30 or lower, completely mute the bus
+	GameManager.SAVE_GAME()
+	if GameManager.inst._is_muted: return
+	
+	if volume_db <= -30.0:
+		AudioServer.set_bus_mute(bus_idx, true)
+		AudioServer.set_bus_volume_db(bus_idx, -30.0)
+	else:
+		# Otherwise, unmute it and set the specific volume
+		AudioServer.set_bus_mute(bus_idx, false)
+		AudioServer.set_bus_volume_db(bus_idx, volume_db)
+
+func _apply_wavy_pitch(player: AudioStreamPlayer, progress: float) -> void:
+	var time: float = Time.get_ticks_msec() / 1000.0 
+	var wobble: float = sin(time * 30.0) * 0.15 * progress
+	
+	player.pitch_scale = max(0.01, progress + wobble)
+	player.volume_db = linear_to_db(progress)
+
+func _update_volume():
+	pass
