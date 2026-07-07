@@ -21,15 +21,26 @@ var update_skipped: bool = false
 var json_http: HTTPRequest
 var download_http: HTTPRequest
 
+#var singletons = [
+	#GameManager,
+	#Transition,
+	#Events,
+	#WindowManager,
+	#NetworkSync,
+	#NetworkServer,
+	#NetworkClient,
+	#Audio
+#]
+
 var singletons = [
-	GameManager,
-	Transition,
-	Events,
-	WindowManager,
-	NetworkSync,
-	NetworkServer,
-	NetworkClient,
-	Audio
+	"res://classes/GameManager/GameManager.gd",
+	"res://classes/Transition/Transition.gd",
+	"res://classes/Events/Events.gd",
+	"res://classes/WindowManager/window_manager.gd",
+	"res://classes/websocket/NetworkClient/NetworkClient.gd",
+	"res://classes/websocket/NetworkServer/NetworkServer.gd",
+	"res://classes/websocket/NetworkSync/NetworkSync.gd",
+	"res://classes/Audio/Audio.gd",
 ]
 
 var is_downloading: bool = false
@@ -230,8 +241,10 @@ func _initialize_singletons() -> void:
 	
 	status_label.text = _format_message("Loading game...")
 	print("[Boot] All patches processed. Loading singletons...")
-	for singleton in singletons:
-		singleton.spawn()
+	for path in singletons:
+		var script_resource = load(path)
+		if script_resource and script_resource.has_method("spawn"):
+			script_resource.spawn() # This triggers your clean spawn function!
 	GameManager.inst.game_version = current_version
 	await get_tree().create_timer(3).timeout
 	get_tree().change_scene_to_file("res://scenes/splash/splash.tscn")

@@ -1,5 +1,5 @@
 class_name Events extends Node
-const FILE = "uid://cvcn4ghnbbfy0"
+const FILE = "res://classes/Events/Events.tscn"
 static var inst: Events = null
 
 static func spawn():

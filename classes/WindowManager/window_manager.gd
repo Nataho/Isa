@@ -1,9 +1,10 @@
 class_name WindowManager extends Node2D
-const FILE = preload("uid://cyamgc7dktii8")
+const FILE = "uid://cyamgc7dktii8"
 static var inst:WindowManager = null
 
 static func spawn():
-	inst = FILE.instantiate()
+	var loaded = load(FILE)
+	inst = loaded.instantiate()
 	Dummy.add_child(inst)
 
 static func get_screen_center() -> Vector2: return inst._get_screen_center()
