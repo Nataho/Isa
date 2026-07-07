@@ -23,6 +23,10 @@
     "0.1.16": {
       "url": "https://github.com/Nataho/Isa/releases/download/0.1.16/patch.pck",
       "requires_reboot": true
+    },
+    "0.1.17": {
+      "url": "https://github.com/Nataho/Isa/releases/download/0.1.17/patch.pck",
+      "requires_reboot": true
     }
   }
 }
