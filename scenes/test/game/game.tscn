@@ -13,6 +13,16 @@ font_size = 40
 font = ExtResource("4_ubanp")
 font_size = 40
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vxpyd"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+corner_radius_top_left = 50
+corner_radius_top_right = 50
+corner_radius_bottom_right = 50
+corner_radius_bottom_left = 50
+corner_detail = 20
+shadow_color = Color(1, 1, 1, 0.6)
+shadow_size = 250
+
 [node name="Game" type="Control" unique_id=1261132507]
 layout_mode = 3
 anchors_preset = 15
@@ -135,3 +145,9 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="turn_timer" type="Timer" parent="." unique_id=1787677204]
+
+[node name="highlight" type="Panel" parent="." unique_id=802193668]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_vxpyd")

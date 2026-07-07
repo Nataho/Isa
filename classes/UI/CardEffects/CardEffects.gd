@@ -27,12 +27,12 @@ var target_id = -1
 var animation_order :Array[String] = []
 var card:Dictionary = {
 	"id": -1,
-	"draw_amount": 4
+	"draw_amount": 0
 	,
 	"skips_turn": false,
 	"skips_everyone": false,
 	"forces_hand_swap": false,
-	"reverses_turn": false
+	"reverses_turn": true
 }
 var playing := ""
 var debug := true

@@ -13,6 +13,7 @@ const FILE = preload("uid://dttfkvs2j6lxn")
 
 @onready var turn_time_label: Label = $turn_time_label #Turn Time\n0s
 @onready var turn_timer: Timer = $turn_timer
+@onready var highlight: Panel = $highlight
 
 var paused := false
 
@@ -100,6 +101,25 @@ func _process(delta: float) -> void:
 		turn_time_label.text = "Turn Time:\n" + str(ceil(turn_timer.time_left)) + "s"
 	else:
 		turn_time_label.text = "Turn Time:\n0s"
+	
+	if player_hands.has(active_turn_lobby_id):
+		var active_hand = player_hands[active_turn_lobby_id]
+		if is_instance_valid(active_hand):
+			highlight.show()
+			
+			# Higher multiplier = snappier movement. Lower multiplier = slower slide.
+			var lerp_speed := delta * 8.0 
+			
+			# Smoothly slide and scale the highlight frame
+			highlight.global_position = highlight.global_position.lerp(active_hand.global_position + active_hand.size/2, lerp_speed)
+			#highlight.size = highlight.size.lerp(active_hand.size, lerp_speed)
+			highlight.pivot_offset = highlight.pivot_offset.lerp(active_hand.pivot_offset, lerp_speed)
+			
+			# Crucial: lerp_angle stops the frame from doing wild 360-degree spins 
+			highlight.rotation = lerp_angle(highlight.rotation, active_hand.rotation, lerp_speed)
+	else:
+		highlight.hide()
+	
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_cancel"):

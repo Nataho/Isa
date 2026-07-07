@@ -21,6 +21,7 @@ const sound := {
 	
 	"drawed": [preload("uid://b1m6dyhegke0p"), 0],
 	"skip": [preload("uid://cj0nf4f4augbf"), 0],
+	"reverse": [preload("uid://d34oxhs1tcw62"), 0]
 }
 
 const music := {

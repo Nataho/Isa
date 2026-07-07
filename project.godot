@@ -22,6 +22,7 @@ buses/default_bus_layout="uid://dm40q33xrsr4g"
 [autoload]
 
 Dummy="*uid://cf5w334y44mkv"
+Debug="*uid://ddp0r1tbubj8f"
 
 [debug]
 
@@ -34,6 +35,10 @@ window/size/viewport_height=1080
 window/stretch/mode="viewport"
 window/stretch/aspect="expand"
 window/main_scene="uid://sxodp55gia30"
+
+[editor]
+
+run/main_run_args="--debugniowen"
 
 [physics]
 
