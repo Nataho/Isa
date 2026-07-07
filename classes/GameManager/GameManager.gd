@@ -14,6 +14,8 @@ var no_start := false
 # ─── FIX 2: Instantiate this inline so it is NEVER Nil ───
 var lns : LoadNSave = LoadNSave.new() 
 
+var game_version = "x.x.x"
+
 var player_data = { #is saved
 	"name": "player",
 }

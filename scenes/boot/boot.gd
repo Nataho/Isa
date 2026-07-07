@@ -2,7 +2,7 @@ extends Control
 
 const SIMULATE_OFFLINE = false
 const JSON_URL = "https://nataho.github.io/Isa/patches.json"
-const BASE_VERSION = "0.1.9"
+const BASE_VERSION = "0.1.12"
 
 @onready var blink: Timer = $blink
 var _guide_transparent = false
@@ -218,6 +218,7 @@ func _initialize_singletons() -> void:
 	print("[Boot] All patches processed. Loading singletons...")
 	for singleton in singletons:
 		singleton.spawn()
+	GameManager.inst.game_version = current_version
 	await get_tree().create_timer(3).timeout
 	get_tree().change_scene_to_file("res://scenes/splash/splash.tscn")
 

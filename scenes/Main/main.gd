@@ -5,6 +5,7 @@ extends Control
 @onready var quit_button: Button = $buttons/quit
 @onready var card: Card = $Card
 @onready var placeholder: Control = $placeholder
+@onready var version_label: Label = $Version
 
 
 # ─── OSCILLATION CONFIGURATION ───
@@ -23,6 +24,8 @@ func _ready() -> void:
 	GameManager.LOAD_GAME()
 	GameManager.SAVE_GAME()
 	GameManager.inst.reset_network_data()
+	
+	version_label.text = GameManager.inst.game_version
 	
 	if NetworkClient.inst.has_method("stop"):
 		NetworkClient.stop()
