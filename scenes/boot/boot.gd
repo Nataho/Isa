@@ -1,7 +1,8 @@
 extends Control
 
-const SIMULATE_OFFLINE = true
-const JSON_URL = "https://your-server.com/patches.json"
+const SIMULATE_OFFLINE = false
+const JSON_URL = "https://nataho.github.io/Isa/patches.json"
+var current_version = "0.1.10"
 
 @onready var http_request: HTTPRequest = $UpdaterHTTP
 @onready var progress_bar: ProgressBar = $ProgressBar
@@ -27,7 +28,7 @@ func _ready() -> void:
 		# Mocking the JSON data so you can test it without a server
 		var mock_json = {
 			"patches": {
-				"0.1": {
+				"0.1.0": {
 					"url": "fake_url", 
 					"requires_reboot": true # Try setting this to false later!
 				}
@@ -68,6 +69,12 @@ func _process_patch_list(server_data: Dictionary) -> void:
 	var needs_reboot = false
 	
 	for patch_version in server_data["patches"]:
+		# ─── THE NEW VERSION GATEWAY ───
+		# If the patch is older than or equal to our base game, ignore it completely!
+		if not _is_patch_newer(patch_version, current_version):
+			print("[Boot] Skipping obsolete patch: ", patch_version)
+			continue
+			
 		var patch_info = server_data["patches"][patch_version]
 		var patch_path = "user://patch_" + patch_version + ".pck"
 		
@@ -76,16 +83,12 @@ func _process_patch_list(server_data: Dictionary) -> void:
 			status_label.text = "Downloading patch " + patch_version + "..."
 			
 			if SIMULATE_OFFLINE:
-				# FAKE DOWNLOAD: Create a dummy file on the hard drive 
-				# so the game knows we "downloaded" it and breaks the loop!
 				var dummy_file = FileAccess.open(patch_path, FileAccess.WRITE)
 				dummy_file.store_string("dummy")
 				dummy_file.close()
 			else:
-				# REAL DOWNLOAD: Pause and wait for the real file
 				await _download_file(patch_info["url"], patch_path)
 			
-			# SAFETY CHECK: Only reboot if the file actually exists on the drive now
 			if FileAccess.file_exists(patch_path):
 				if patch_info.get("requires_reboot", false):
 					needs_reboot = true
@@ -131,3 +134,18 @@ func _initialize_singletons() -> void:
 		singleton.spawn()
 		
 	get_tree().change_scene_to_file("res://scenes/splash/splash.tscn")
+
+# Returns true if the server_version is strictly NEWER than our base version
+func _is_patch_newer(server_version: String, base_version: String) -> bool:
+	var server_parts = server_version.split(".")
+	var base_parts = base_version.split(".")
+	
+	var server_ints = []
+	var base_ints = []
+	
+	for part in server_parts: server_ints.append(part.to_int())
+	for part in base_parts: base_ints.append(part.to_int())
+	
+	# Godot natively compares arrays component-by-component!
+	# [0, 1, 10] > [0, 1, 2] evaluates perfectly to true.
+	return server_ints > base_ints
