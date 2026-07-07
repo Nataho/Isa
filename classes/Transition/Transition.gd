@@ -1,9 +1,10 @@
 class_name Transition extends CanvasLayer
-const FILE = preload("uid://dh51goui3fva0")
+const FILE = "uid://dh51goui3fva0"
 static var inst: Transition = null
 
 static func spawn():
-	inst = FILE.instantiate()
+	var loaded = load(FILE)
+	inst = loaded.instantiate()
 	Dummy.add_child(inst)
 
 enum { DISSOLVE }

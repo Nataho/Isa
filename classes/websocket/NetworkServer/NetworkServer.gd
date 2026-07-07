@@ -1,9 +1,10 @@
 class_name NetworkServer extends Node #NetworkServer.gd
-const FILE = preload("uid://bchcvd6uawwo5")
+const FILE = "uid://bchcvd6uawwo5"
 static var inst:NetworkServer = null
 
 static func spawn():
-	inst = FILE.instantiate()
+	var loaded = load(FILE)
+	inst = loaded.instantiate()
 	Dummy.add_child(inst)
 
 var active_players: Array[Dictionary] = []

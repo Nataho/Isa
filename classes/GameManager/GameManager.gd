@@ -1,10 +1,11 @@
 class_name GameManager extends Node
-const FILE = preload("uid://ps4y6f5ul2l3")
+const FILE = "uid://ps4y6f5ul2l3"
 
 static var inst:GameManager = null
 
 static func spawn():
-	inst = FILE.instantiate()
+	var loaded = load(FILE)
+	inst = loaded.instantiate()
 	inst._early_setup()
 	Dummy.add_child(inst)
 

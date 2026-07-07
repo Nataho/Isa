@@ -1,9 +1,10 @@
 class_name Events extends Node
-const FILE = preload("uid://cvcn4ghnbbfy0")
+const FILE = "uid://cvcn4ghnbbfy0"
 static var inst: Events = null
 
 static func spawn():
-	inst = FILE.instantiate()
+	var loaded = load(FILE)
+	inst = loaded.instantiate()
 	Dummy.add_child(inst)
 	
 ### ─── LAN CONNECTION & LOBBY SIGNALS (From your network code) ───

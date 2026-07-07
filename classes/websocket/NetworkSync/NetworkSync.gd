@@ -1,10 +1,11 @@
 class_name NetworkSync extends Node #NetworkSync.gd
-const FILE = preload("uid://b2vy5bb71104u")
+const FILE = "uid://b2vy5bb71104u"
 
 static var inst:NetworkSync = null
 
 static func spawn():
-	inst = FILE.instantiate()
+	var loaded = load(FILE)
+	inst = loaded.instantiate()
 	Dummy.add_child(inst)
 
 enum NetMode { OFFLINE, LAN_HOST, LAN_CLIENT, ONLINE }

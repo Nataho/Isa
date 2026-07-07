@@ -1,9 +1,12 @@
 class_name Audio extends Node
-const FILE = preload("uid://bg1jiq5h0e705")
+const FILE = "uid://bg1jiq5h0e705"
+
+static var inst:Audio = null
 
 static func spawn():
-	active_node = FILE.instantiate()
-	Dummy.add_child(active_node)
+	var loaded = load(FILE)
+	inst = loaded.instantiate()
+	Dummy.add_child(inst)
 
 # The acting autoload instance
 static var active_node: Audio

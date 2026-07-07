@@ -1,10 +1,11 @@
 class_name NetworkClient extends Node #Networkclient.gd
-const FILE = preload("uid://bsdwo4km1babq")
+const FILE = "uid://bsdwo4km1babq"
 
 static var inst:NetworkClient = null
 
 static func spawn():
-	inst = FILE.instantiate()
+	var loaded = load(FILE)
+	inst = loaded.instantiate()
 	Dummy.add_child(inst)
 
 @export var listen_port: int = 4242
