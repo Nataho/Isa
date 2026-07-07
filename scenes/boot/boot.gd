@@ -2,7 +2,7 @@ extends Control
 
 const SIMULATE_OFFLINE = false
 const JSON_URL = "https://nataho.github.io/Isa/patches.json"
-const BASE_VERSION = "0.1.13"
+const BASE_VERSION = "0.1.14"
 
 @onready var blink: Timer = $blink
 var _guide_transparent = false
@@ -50,18 +50,25 @@ func _ready() -> void:
 	if FileAccess.file_exists("user://version.txt"):
 		var file = FileAccess.open("user://version.txt", FileAccess.READ)
 		current_version = file.get_as_text().strip_edges()
-		print("[Boot] Found version.txt. Current version: ", current_version)
+		print("[Boot] Found version.txt. Current version: ", current_version) 
+		
+		# ─── THE FIX: MOUNT THE SAVED PATCH IMMEDIATELY ───
+		var saved_patch_path = "user://patch_" + current_version + ".pck"
+		if FileAccess.file_exists(saved_patch_path):
+			print("[Boot] Mounting saved patch into memory...")
+			ProjectSettings.load_resource_pack(saved_patch_path)
+			
 	else:
 		current_version = BASE_VERSION
 		print("[Boot] No version.txt found. Defaulting to base: ", current_version)
 	
 	_update_version_info()
 	json_http = HTTPRequest.new()
-	json_http.timeout = 15.0 # Increased timeout to give slow connections more time
+	json_http.timeout = 15.0 
 	add_child(json_http)
 	
 	download_http = HTTPRequest.new()
-	download_http.timeout = 30.0 # High timeout for large file downloads
+	download_http.timeout = 30.0 
 	add_child(download_http)
 	
 	if SIMULATE_OFFLINE:
