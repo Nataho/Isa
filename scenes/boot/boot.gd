@@ -2,7 +2,7 @@ extends Control
 
 const SIMULATE_OFFLINE = false
 const JSON_URL = "https://nataho.github.io/Isa/patches.json"
-const BASE_VERSION = "0.1.16"
+const BASE_VERSION = "0.1.17"
 
 @onready var blink: Timer = $blink
 var _guide_transparent = false
@@ -29,6 +29,7 @@ var singletons = [
 	NetworkSync,
 	NetworkServer,
 	NetworkClient,
+	Audio
 ]
 
 var is_downloading: bool = false

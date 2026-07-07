@@ -54,7 +54,6 @@ func _ready() -> void:
 	pass
 
 func _instantiate_singletons():
-	add_child(Audio.new())
 	lns = LoadNSave.new()
 
 func _update_save_data():
