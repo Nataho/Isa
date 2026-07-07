@@ -1,0 +1,8 @@
+{
+  "patches": {
+    "0.1.10": {
+      "url": "https://github.com/yourname/repo/releases/download/v0.2.0/patch_0.2.0.pck",
+      "requires_reboot": true
+    }
+  }
+}
