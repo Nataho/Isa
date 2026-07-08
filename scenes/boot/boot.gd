@@ -2,7 +2,7 @@ extends Control
 
 const SIMULATE_OFFLINE = false
 const JSON_URL = "https://nataho.github.io/Isa/patches.json"
-const BASE_VERSION = "0.1.20"
+const BASE_VERSION = "0.1.21"
 
 @onready var blink: Timer = $blink
 var _guide_transparent = false
@@ -236,8 +236,8 @@ func _initialize_singletons() -> void:
 		status_label.text = _format_message("Download Failed...")
 		await get_tree().create_timer(3).timeout
 	if update_skipped:
-		status_label.text = _format_message("Skipping Search")
-		await get_tree().create_timer(3).timeout
+		status_label.text = _format_message("Skipping...")
+		await get_tree().create_timer(1).timeout
 	
 	status_label.text = _format_message("Loading game...")
 	print("[Boot] All patches processed. Loading singletons...")
