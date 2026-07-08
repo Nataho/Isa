@@ -29,7 +29,9 @@ const sound := {
 	"drawed": [preload("uid://b1m6dyhegke0p"), 0],
 	"skip": [preload("uid://cj0nf4f4augbf"), 0],
 	"reverse": [preload("uid://d34oxhs1tcw62"), 0],
-	"danger": [preload("uid://cj5xvd47cylsa"), 0]
+	"danger": [preload("uid://cj5xvd47cylsa"), 0],
+	"deal": [preload("uid://b12qc7ub4g8w7"), 0],
+	"scroll": [preload("uid://bvlcoeirgepgg"), 0]
 }
 
 const music := {

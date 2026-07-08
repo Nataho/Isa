@@ -432,7 +432,9 @@ func _on_sync_data(data: Dictionary):
 				_process_initial_deal(data.get("hands", {}))
 		
 		"deal_card":
+			Audio.play_sound("deal")
 			var target = int(data.get("target_lobby_id", -1))
+			
 			if target == my_lobby_id:
 				# FIXED ORDER: Pass ID first
 				_receive_card(data.get("card_id"), data.get("card_color"), data.get("card_type"))
@@ -452,6 +454,7 @@ func _on_sync_data(data: Dictionary):
 				_host_deal_card(requesting_player)
 		
 		"play_card":
+			Audio.play_sound("deal")
 			if is_game_over: return
 			var player_id = int(data.get("lobby_id", -1))
 			

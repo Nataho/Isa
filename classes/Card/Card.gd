@@ -405,6 +405,7 @@ func _card_mouse_entered():
 	if is_face_down and not is_ui_button: return
 	card_mouse_entered.emit()
 	is_hovering = true
+	Audio.play_sound("scroll")
 	if placeholder:
 		# Removed $anim.play("rise") to let code handle the position
 		if expand_on_hovered:
@@ -420,6 +421,7 @@ func _card_mouse_exited():
 	if is_face_down and not is_ui_button: return
 	card_mouse_exited.emit()
 	is_hovering = false
+	
 	if placeholder: 
 		# Removed $anim.play("fall") to let code handle the position
 		if expand_on_hovered:
