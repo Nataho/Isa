@@ -18,6 +18,7 @@ const FILE = preload("uid://dttfkvs2j6lxn")
 var paused := false
 
 var player_hands: Dictionary = {}
+var game_mode:Dictionary = {}
 
 var deck: Deck = Deck.new()
 var my_lobby_id: int = -1
@@ -38,8 +39,9 @@ var _host_turn_draw_locked: bool = false  # Host Server lock
 var is_in_danger = false
 
 # ─── 1. INSTANTIATION ───
-static func create() -> Game:
+static func create(game_mode:Dictionary) -> Game:
 	var instance = FILE.instantiate() as Game
+	instance.game_mode = game_mode	
 	return instance
 
 func _ready() -> void:
@@ -328,7 +330,14 @@ func _remove_player(p_id: int):
 # ─── 4. HOST LOGIC ───
 func _host_start_game():
 	print("Host is generating deck and batching starting hands...")
-	deck.generate_standard_deck()
+	var mod = game_mode.get("mode", "isa")
+	var inverted = game_mode.get("inverted", false)
+	if mod == "isa":
+		if inverted:
+			deck.generate_inverted_standard_deck()
+		else:
+			deck.generate_standard_deck()
+			
 	
 	var players = GameManager.inst.network_data.get("player_list", [])
 	var starting_hands = {}
@@ -598,7 +607,7 @@ func _receive_card(c_id: int, c_color: int, c_type: int):
 			
 			if wants_to_play:
 				if new_card.card_color == Card.CardColor.WILD:
-					var color_prompt = ColorPrompt.create(new_card.card_type)
+					var color_prompt = ColorPrompt.create(new_card)
 					add_child(color_prompt)
 					var chosen_color_index = await color_prompt.color_chosen
 					if chosen_color_index == -1:

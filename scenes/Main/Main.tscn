@@ -120,7 +120,7 @@ offset_bottom = 58.0
 grow_horizontal = 2
 grow_vertical = 2
 is_ui_button = true
-card_color = 6
+card_color = 4
 card_type = 13
 
 [node name="placeholder" type="Control" parent="." unique_id=1800140179]

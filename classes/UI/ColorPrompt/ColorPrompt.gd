@@ -11,12 +11,14 @@ signal color_chosen(color_index: int)
 
 
 var card_type:Card.CardType = Card.CardType.DRAW_FOUR
+var card:Card = null
 var prompt_cards: Array[Card] = []
 var placeholders: Array[Control] = []
 
-static func create(card:Card.CardType) -> ColorPrompt:
+static func create(card:Card) -> ColorPrompt:
 	var obj:ColorPrompt = FILE.instantiate()
-	obj.card_type = card
+	obj.card_type = card.card_type
+	obj.card = card
 	return obj
 
 func _ready() -> void:
@@ -25,6 +27,17 @@ func _ready() -> void:
 	green.set_placeholder($hand/green)
 	blue.set_placeholder($hand/blue)
 	skip.set_placeholder($hand/skip)
+	
+	if card.card_color == card.CardColor.INVERTED_WILD:
+		red.card_color = Card.CardColor.MINT
+		yellow.card_color = Card.CardColor.PURPLE
+		green.card_color = Card.CardColor.PINK
+		blue.card_color = Card.CardColor.ORANGE
+		
+		red._initialize_card_art()
+		yellow._initialize_card_art()
+		green._initialize_card_art()
+		blue._initialize_card_art()
 	
 	red.clicked.connect(_red)
 	yellow.clicked.connect(_yellow)
@@ -57,10 +70,10 @@ func _process(delta: float) -> void:
 			
 			card.global_position = card.global_position.lerp(final_position - card_offset, 10 * delta)
 
-func _red():  _on_color_button_pressed(0)
-func _yellow(): _on_color_button_pressed(1)
-func _green(): _on_color_button_pressed(2)
-func _blue(): _on_color_button_pressed(3)
+func _red():  _on_color_button_pressed(red.card_color); red.z_index += 1
+func _yellow(): _on_color_button_pressed(yellow.card_color); yellow.z_index += 1
+func _green(): _on_color_button_pressed(green.card_color); green.z_index += 1
+func _blue(): _on_color_button_pressed(blue.card_color); blue.z_index += 1
 
 func _on_color_button_pressed(chosen_index: int) -> void:
 	color_chosen.emit(chosen_index)

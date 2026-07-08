@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dyvpako6bqgy2" path="res://scenes/Multiplayer/Lobby/lobby.gd" id="1_tnkfs"]
 [ext_resource type="FontFile" uid="uid://bjmn0wmegsi1w" path="res://assets/fonts/ari_w9500/ari-w9500-display.ttf" id="2_gxw8m"]
+[ext_resource type="PackedScene" uid="uid://c3fvu61ft2tex" path="res://classes/Card/Card.tscn" id="2_hn468"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gxw8m"]
 bg_color = Color(1, 0.83137256, 0, 1)
@@ -9,6 +10,9 @@ bg_color = Color(1, 0.83137256, 0, 1)
 [sub_resource type="LabelSettings" id="LabelSettings_vxpyd"]
 font = ExtResource("2_gxw8m")
 font_size = 40
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hn468"]
+bg_color = Color(1, 0, 0.32156864, 1)
 
 [node name="Lobby" type="Control" unique_id=645984114]
 layout_mode = 3
@@ -47,6 +51,35 @@ layout_mode = 2
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 
+[node name="ModsPanel" type="Panel" parent="MarginContainer/HBoxContainer" unique_id=535059764]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="hand" type="HBoxContainer" parent="MarginContainer/HBoxContainer/ModsPanel" unique_id=1318040456]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -336.0
+offset_top = -34.0
+offset_right = 336.0
+offset_bottom = 34.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 160
+alignment = 1
+
+[node name="isa" type="Control" parent="MarginContainer/HBoxContainer/ModsPanel/hand" unique_id=516497063]
+custom_minimum_size = Vector2(48, 68)
+custom_maximum_size = Vector2(48, 68)
+layout_mode = 2
+mouse_filter = 2
+
 [node name="Control" type="Control" parent="MarginContainer/HBoxContainer" unique_id=335901717]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -77,5 +110,45 @@ text = "Time Left:
 label_settings = SubResource("LabelSettings_vxpyd")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="ModsButton" type="Button" parent="MarginContainer/HBoxContainer/GameButtons" unique_id=2060041218]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_gxw8m")
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_hn468")
+toggle_mode = true
+text = "Mods"
+
+[node name="Control" type="Control" parent="MarginContainer/HBoxContainer/GameButtons" unique_id=1199287098]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="isa" parent="MarginContainer/HBoxContainer/GameButtons/Control" unique_id=1861548578 node_paths=PackedStringArray("placeholder") instance=ExtResource("2_hn468")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+is_ui_button = true
+is_holdable = true
+expand_on_hovered = false
+card_color = 10
+placeholder = NodePath("../../../ModsPanel/hand/isa")
+
+[node name="mod_placeholder" type="Control" parent="MarginContainer/HBoxContainer/GameButtons/Control" unique_id=1603269006]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Timer" type="Timer" parent="." unique_id=634325765]

@@ -37,6 +37,45 @@ func generate_standard_deck() -> void:
 
 	shuffle()
 
+func generate_inverted_standard_deck() -> void:
+	_clear_deck()
+	
+	var colored_types = [
+		Card.CardType.ZERO, Card.CardType.ONE, Card.CardType.TWO, Card.CardType.THREE,
+		Card.CardType.FOUR, Card.CardType.FIVE, Card.CardType.SIX, Card.CardType.SEVEN,
+		Card.CardType.EIGHT, Card.CardType.NINE, Card.CardType.SKIP, Card.CardType.REVERSE,
+		Card.CardType.DRAW_TWO
+	]
+	var colors = [
+		Card.CardColor.RED,
+		Card.CardColor.GREEN,
+		Card.CardColor.BLUE,
+		Card.CardColor.YELLOW,
+		Card.CardColor.MINT,
+		Card.CardColor.PURPLE,
+		Card.CardColor.PINK,
+		Card.CardColor.ORANGE,
+	]
+	
+	for color_index in colors:
+		for type in colored_types:
+			if type == Card.CardType.ZERO:
+				# Standard UNO only has ONE '0' card per color
+				_add_new_card(color_index, type)
+			else:
+				# Standard UNO has TWO of every number 1-9 and action card per color
+				_add_new_card(color_index, type)
+				_add_new_card(color_index, type)
+				
+	for i in range(4):
+		_add_new_card(Card.CardColor.WILD, Card.CardType.COLOR)     # Standard Wild
+		_add_new_card(Card.CardColor.WILD, Card.CardType.DRAW_FOUR) # Wild Draw 4
+	for i in range(4):
+		_add_new_card(Card.CardColor.INVERTED_WILD, Card.CardType.COLOR)     # Standard Wild
+		_add_new_card(Card.CardColor.INVERTED_WILD, Card.CardType.DRAW_FOUR) # Wild Draw 4
+	
+	shuffle()
+
 # Helper function to generate and track IDs seamlessly
 func _add_new_card(color: Card.CardColor, type: Card.CardType) -> void:
 	var new_card = Card.create(id_counter,color, type)

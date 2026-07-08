@@ -5,10 +5,29 @@ extends Control
 @onready var timer: Timer = $Timer
 @onready var time_label: Label = $MarginContainer/HBoxContainer/GameButtons/time_label
 
+@onready var mods_panel: Panel = %ModsPanel
+@onready var blank_panel: Control = $MarginContainer/HBoxContainer/Control
+
+@onready var mods_button: Button = %ModsButton
+
+@onready var mod_cards:Array[Card] = [
+	$MarginContainer/HBoxContainer/GameButtons/Control/isa
+]
+@onready var mod_placeholders:Array[Control] = [
+	$MarginContainer/HBoxContainer/ModsPanel/hand/isa
+]
+@onready var mod_placeholder: Control = $MarginContainer/HBoxContainer/GameButtons/Control/mod_placeholder
 
 var max_players = 4 # Limited to 4 players as per seating layout
 var player_list: Array = [] 
 var countdown_time: int = 120
+
+# ─── LOBBY CONFIGURATION TRACKERS ───
+var mods_panel_visible: bool = false
+var game_mode: Dictionary = {
+	"mode": "isa",
+	"inverted": false
+}
 
 func _ready() -> void:
 	# Reset local ready status so the button defaults back to Yellow
@@ -16,15 +35,33 @@ func _ready() -> void:
 	
 	_connect_signals()
 	_setup_network_data()
+	
+	# ─── ROLE-BASED VISUAL INITIALIZATION ───
+	if GameManager.inst.network_data.get("is_host", false):
+		_update_mods_layout() # Host sets up their unique interactive layout
+	else:
+		mods_button.hide() # Hide the panel toggle button entirely for clients
+		for card in mod_cards:
+			card.clickable = false # Strip click authorization
+			card.is_holdable = false # Strip hold authorization
+			card.set_placeholder(mod_placeholder) # Lock client cards to the main floating layout
+			
+	_update_mod_cards_visuals()
 	Audio.play_music("lobby", Audio.SOUND_END_EFFECTS.FADE)
 
 func _setup_network_data():
 	var existing_players = GameManager.inst.network_data.get("player_list", [])
 	
+	# ─── RETRIEVE PERSISTENT SETTINGS ───
+	# Pull from GameManager if it exists, otherwise use the standard default fallback
+	game_mode = GameManager.inst.network_data.get("game_mode", {
+		"mode": "isa",
+		"inverted": false
+	})
+
 	if GameManager.inst.network_data["is_host"]:
 		GameManager.inst.network_data["game_status"] = "getting ready"
 		
-		# If the list is empty, this is a BRAND NEW lobby creation
 		if existing_players.is_empty():
 			NetworkServer.start()
 			GameManager.inst.network_data["lobby_id"] = 1
@@ -35,19 +72,18 @@ func _setup_network_data():
 				"name": GameManager.inst.player_data["name"],
 				"is_ready": false
 			})
+			# Store the initial configuration setup safely
+			GameManager.inst.network_data["game_mode"] = game_mode
 		else:
 			Events.inst.client_disconnected.connect(_on_server_disconnected)
-			# RETURNING FROM A MATCH: Restore the list
 			player_list = existing_players
-			# Reset everyone's ready status!
 			for p in player_list:
 				p["is_ready"] = false
 		
 		_update_player_ui()
-		_broadcast_current_list() # Guarantee clients get the fresh un-readied list
+		_broadcast_current_list()
 		
 	else:
-		# Client returning from a match: Instantly build UI so it doesn't blink empty
 		if not existing_players.is_empty():
 			player_list = existing_players
 			for p in player_list:
@@ -65,6 +101,15 @@ func _connect_signals():
 		Events.inst.join_requested.connect(_on_join_requested)
 		Events.inst.client_left_lobby.connect(_on_client_left_lobby)
 		Events.inst.client_left_lobby.connect(_on_player_dropped)
+		
+		# ─── HOST-ONLY INTERACTION CONNECTIONS ───
+		mods_button.pressed.connect(_on_mods_button_pressed)
+		for i in range(mod_cards.size()):
+			var card = mod_cards[i]
+			card.clickable = true
+			card.is_holdable = true
+			card.clicked.connect(func(): _on_mod_card_interact(card, false))
+			card.held_click.connect(func(): _on_mod_card_interact(card, true))
 	else:
 		Events.inst.client_disconnected.connect(_on_client_disconnected)
 	
@@ -77,17 +122,25 @@ func _on_sync_data(data: Dictionary):
 	match type:
 		"update_player_list":
 			player_list = data["player_list"]
+			
+			if data.has("game_mode"):
+				game_mode = data["game_mode"]
+				# Keep client-side memory mirrors in sync too
+				GameManager.inst.network_data["game_mode"] = game_mode
+				_update_mod_cards_visuals()
+				
 			_update_player_ui()
+			
 		"request_player_list":
 			if GameManager.inst.network_data["is_host"]:
 				_broadcast_current_list()
+				
 		"toggle_ready":
 			if GameManager.inst.network_data["is_host"]:
 				var p_id = data.get("lobby_id", -1)
 				var p_ready = data.get("is_ready", false)
 				_host_update_player_ready(p_id, p_ready)
 		
-		# ─── MULTIPLAYER TIMER LISTENERS ───
 		"lobby_countdown":
 			countdown_time = data.get("time", 120)
 			_update_countdown_time()
@@ -113,7 +166,48 @@ func _update_player_ui():
 			var tag = LobbyTag.create(player_name, color)
 			players.add_child(tag)
 
+# ─── HOST-ONLY VISUAL LAYOUT MANAGER ───
+func _update_mods_layout() -> void:
+	mods_panel.visible = mods_panel_visible
+	blank_panel.visible = !mods_panel_visible
+	
+	for i in range(mod_cards.size()):
+		if mods_panel_visible:
+			mod_cards[i].set_placeholder(mod_placeholders[i])
+		else:
+			mod_cards[i].set_placeholder(mod_placeholder)
 
+func _update_mod_cards_visuals() -> void:
+	for card in mod_cards:
+		var target_mode = card.name.to_lower()
+		
+		if target_mode == game_mode["mode"]:
+			if game_mode["inverted"]:
+				if card.has_method("invert_rotation"): card.invert_rotation()
+				elif card.has_method("_invert_rotation"): card._invert_rotation()
+			else:
+				if card.has_method("reset_rotation"): card.reset_rotation()
+		else:
+			if card.has_method("reset_rotation"): card.reset_rotation()
+
+# ─── HOST INTERACTION PROCESSORS ───
+func _on_mods_button_pressed() -> void:
+	mods_panel_visible = !mods_panel_visible
+	_update_mods_layout() # Only fires locally on the host's screen
+
+func _on_mod_card_interact(card: Card, is_inverted_hold: bool) -> void:
+	var selected_mode = card.name.to_lower()
+	
+	game_mode = {
+		"mode": selected_mode,
+		"inverted": is_inverted_hold
+	}
+	
+	# ─── SAVE TO PERSISTENT CACHE ───
+	GameManager.inst.network_data["game_mode"] = game_mode
+	
+	_update_mod_cards_visuals()
+	_broadcast_current_list()
 
 func _on_join_requested(ws_peer: WebSocketPeer, player_data: Dictionary):
 	print("someone is trying to join: ", player_data)
@@ -139,15 +233,14 @@ func _on_join_requested(ws_peer: WebSocketPeer, player_data: Dictionary):
 		"is_ready": false
 	})
 	
-	# ─── TIMER RESET ON JOIN ───
 	if GameManager.inst.network_data["is_host"]:
 		if not timer.is_stopped():
-			timer.stop() 
+			timer.stop()
 		countdown_time = 120
 		print("A new player has joined! Resetting lobby timer.")
 	
 	_update_player_ui()
-	_broadcast_current_list()
+	_broadcast_current_list() # Automatically updates the newly joined player's mode configuration!
 	
 	if GameManager.inst.network_data["is_host"]:
 		_check_start_condition()
@@ -155,7 +248,8 @@ func _on_join_requested(ws_peer: WebSocketPeer, player_data: Dictionary):
 func _broadcast_current_list():
 	var sync_payload := {
 		"type": "update_player_list",
-		"player_list": player_list
+		"player_list": player_list,
+		"game_mode": game_mode # Sent cleanly down to everyone
 	}
 	NetworkSync.sync_data(sync_payload)
 
@@ -168,7 +262,6 @@ func _host_update_player_ready(target_id: int, ready_state: bool):
 	_broadcast_current_list()
 	_check_start_condition()
 
-# ─── DYNAMIC START CONDITIONS ───
 func _check_start_condition():
 	if player_list.is_empty():
 		return
@@ -179,7 +272,6 @@ func _check_start_condition():
 		if profile.get("is_ready", false):
 			ready_count += 1
 			
-	# Condition 1: ALL players are ready -> Skip straight to 10 seconds remaining
 	if ready_count == total_players and total_players >= 2:
 		countdown_time = 10
 		if timer.is_stopped():
@@ -187,7 +279,6 @@ func _check_start_condition():
 		print("Everyone is ready! Fast-forwarding timer to 10 seconds.")
 		NetworkSync.sync_data({"type": "lobby_countdown", "time": countdown_time})
 		
-	# Condition 2: At least 2 players are ready -> Normal 120s count
 	elif ready_count >= 2:
 		if timer.is_stopped():
 			countdown_time = 120
@@ -195,7 +286,6 @@ func _check_start_condition():
 			print("2+ players ready. Starting lobby timer at 120 seconds.")
 			NetworkSync.sync_data({"type": "lobby_countdown", "time": countdown_time})
 			
-	# Condition 3: Less than 2 players are ready -> Stop the timer entirely
 	else:
 		if not timer.is_stopped():
 			timer.stop()
@@ -219,19 +309,16 @@ func _on_player_dropped(player_data: Dictionary) -> void:
 	var dropped_id = player_data.get("lobby_id", -1)
 	print("Lobby: Player ", dropped_id, " disconnected!")
 	
-	# Find and remove them from the host's master list
 	for i in range(player_list.size() - 1, -1, -1):
 		if int(player_list[i].get("lobby_id", -1)) == dropped_id:
 			player_list.remove_at(i)
 			break
 			
-	# Update the UI and tell all remaining clients about the new list!
 	_update_player_ui()
 	_broadcast_current_list()
 
 func _on_server_disconnected() -> void:
 	print("Lobby: Lost connection to server! Returning to main menu")
-	
 	NetworkClient.stop()
 	GameManager.inst.reset_network_data()
 	Transition.change_scene(Transition.Scenes.MAIN, Transition.DISSOLVE)
@@ -271,9 +358,8 @@ func _input(event: InputEvent) -> void:
 		GameManager.inst.reset_network_data()
 		Transition.change_scene(Transition.Scenes.MAIN, Transition.DISSOLVE)
 
-# ─── COUNTDOWN TICK AND AUTOMATIC READY ───
 func _countdown():
-	if not GameManager.inst.network_data["is_host"]: 
+	if not GameManager.inst.network_data["is_host"]:
 		return 
 
 	countdown_time -= 1
@@ -290,20 +376,18 @@ func _host_force_everyone_ready():
 	_update_player_ui()
 	_broadcast_current_list()
 
-# ─── CLEAN SCENE SWAP VIA ROOT ───
 func _start_sequence():
 	GameManager.inst.network_data["player_list"] = player_list
 	GameManager.inst.network_data["game_status"] = "in game"
 	
+	# Handoff configuration payload seamlessly to the gameplay layer
+	GameManager.inst.network_data["game_mode"] = game_mode
+	
 	Transition.change_scene(Transition.Scenes.DUMMY, Transition.DISSOLVE)
-	# Instantiate cleanly via your static function
 	await Transition.inst.screen_obscured
-	var game_instance = Game.create()
+	var game_instance = Game.create(game_mode)
 	
-	# Add directly to root so it sits fresh on screen without lobby baggage
 	get_tree().root.add_child(game_instance)
-	
-	# Cleanly wipe the lobby scene and its inputs out of existence
 	queue_free()
 
 func _update_countdown_time():

@@ -71,6 +71,7 @@ _data = {
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_0haaq")
+card_color = 5
 
 [node name="body" type="Control" parent="." unique_id=64456358]
 texture_filter = 1

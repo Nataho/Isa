@@ -22,6 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 is_ui_button = true
 expand_on_hovered = false
+card_color = 0
 
 [node name="yellow" parent="." unique_id=252184844 instance=ExtResource("2_4urnq")]
 layout_mode = 1

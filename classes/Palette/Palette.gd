@@ -9,6 +9,12 @@ class Isa:
 	static func get_pallete() -> Array[Color]:
 		return [RED, YELLOW, GREEN, BLUE]
 
+class IsaInverted:
+	const MINT = Color("00ffff")
+	const PURPLE = Color("91008D")
+	const PINK = Color("FF3483")
+	const ORANGE = Color("ffa500ff")
+
 class Space:
 	const BLACK = Color("17153B")
 	const NAVY = Color("2E236C")

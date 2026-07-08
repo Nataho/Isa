@@ -2,7 +2,7 @@ extends Control
 
 const SIMULATE_OFFLINE = false
 const JSON_URL = "https://nataho.github.io/Isa/patches.json"
-const BASE_VERSION = "0.1.22"
+const BASE_VERSION = "0.1.24"
 
 @onready var blink: Timer = $blink
 var _guide_transparent = false
@@ -13,7 +13,13 @@ const RETRY_DELAY_SECONDS = 3.0
 var current_retry_count = 0
 var download_failed = false
 var update_skipped: bool = false
-
+var status_text: String:
+	set(value):
+		status_text = value
+		if is_node_ready():
+			# This will automatically parse the [wave] and [center] tags
+			status_label.text = _format_message(value)
+			
 @onready var progress_bar: ProgressBar = $ProgressBar
 @onready var status_label: RichTextLabel = $StatusLabel
 @onready var version_label: Label = $version_label
@@ -84,10 +90,10 @@ func _ready() -> void:
 	add_child(download_http)
 	
 	if SIMULATE_OFFLINE:
-		status_label.text = _format_message("Offline Mode...")
+		status_text = _format_message("Offline Mode...")
 		_initialize_singletons()
 	else:
-		status_label.text = _format_message("Checking for updates...")
+		status_text = _format_message("Checking for updates...")
 		await get_tree().process_frame
 		_fetch_json()
 
@@ -101,17 +107,17 @@ func _process(delta: float) -> void:
 			target_progress = (float(downloaded) / float(total)) * 100.0
 			var current_mb = downloaded / 1048576.0
 			var total_mb = total / 1048576.0
-			status_label.text = _format_message("Downloading... %.2f MB / %.2f MB" % [current_mb, total_mb])
+			status_text = _format_message("Downloading... %.2f MB / %.2f MB" % [current_mb, total_mb])
 		
 		progress_bar.value = lerpf(progress_bar.value, target_progress, delta * 8.0)
 
 # ─── FETCH THE JSON (WITH RETRY SUPPORT) ───
 func _fetch_json() -> void:
 	if current_retry_count > 0:
-		status_label.text = _format_message("Connection timed out. Retrying (%d/%d)..." % [current_retry_count, MAX_RETRIES])
+		status_text = _format_message("Connection timed out. Retrying (%d/%d)..." % [current_retry_count, MAX_RETRIES])
 		print("[Boot] Retrying connection... Attempt ", current_retry_count, " of ", MAX_RETRIES)
 	else:
-		status_label.text = _format_message("Connecting to update server...")
+		status_text = _format_message("Connecting to update server...")
 		print("[Boot] Requesting JSON from: ", JSON_URL)
 		
 	json_http.request_completed.connect(_on_json_received, CONNECT_ONE_SHOT)
@@ -147,7 +153,7 @@ func _handle_connection_failure() -> void:
 		_fetch_json()
 	else:
 		print("[Boot] All retries failed. Falling back to offline mode.")
-		status_label.text = _format_message("Network Error. Booting offline...")
+		status_text = _format_message("Network Error. Booting offline...")
 		_initialize_singletons()
 
 # ─── PROCESS PATCHES ───
@@ -171,7 +177,7 @@ func _process_patch_list(server_data: Dictionary) -> void:
 		var patch_path = "user://patch_" + patch_version + ".pck"
 		
 		if not FileAccess.file_exists(patch_path):
-			status_label.text = _format_message("Starting download for " + patch_version + "...")
+			status_text = _format_message("Starting download for " + patch_version + "...")
 			currently_downloading_version = patch_version
 			
 			await _download_file(patch_info["url"], patch_path)
@@ -185,7 +191,7 @@ func _process_patch_list(server_data: Dictionary) -> void:
 			ProjectSettings.load_resource_pack(patch_path)
 	
 	if needs_reboot:
-		status_label.text = _format_message("Applying core update...")
+		status_text = _format_message("Applying core update...")
 		await get_tree().create_timer(0.5).timeout 
 		get_tree().change_scene_to_file("res://scenes/boot/Boot.tscn") 
 		return
@@ -233,18 +239,19 @@ func _on_file_downloaded(result: int, response_code: int, _headers: PackedString
 # ─── HANDOFF TO GAME ───
 func _initialize_singletons() -> void:
 	if download_failed:
-		status_label.text = _format_message("Download Failed...")
+		status_text = _format_message("Download Failed...")
 		await get_tree().create_timer(3).timeout
 	if update_skipped:
-		status_label.text = _format_message("Skipping...")
+		status_text = _format_message("Skipping...")
 		await get_tree().create_timer(1).timeout
 	
-	status_label.text = _format_message("Loading game...")
+	status_text = _format_message("Loading game...")
 	print("[Boot] All patches processed. Loading singletons...")
 	for path in singletons:
-		var script_resource = load(path)
+		# CACHE_MODE_REPLACE forces Godot to ignore RAM and read the freshly mounted .pck file!
+		var script_resource = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_REPLACE)
 		if script_resource and script_resource.has_method("spawn"):
-			script_resource.spawn() # This triggers your clean spawn function!
+			script_resource.spawn()
 	GameManager.inst.game_version = current_version
 	await get_tree().create_timer(3).timeout
 	get_tree().change_scene_to_file("res://scenes/splash/splash.tscn")
@@ -292,7 +299,7 @@ func _skip_and_start_game() -> void:
 	download_http.cancel_request()
 	
 	# Instantly change the UI text and jump straight into loading the game
-	status_label.text = "Loading game..."
+	status_text = "Loading game..."
 	_initialize_singletons()
 	
 func _update_version_info():

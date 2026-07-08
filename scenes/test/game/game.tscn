@@ -80,7 +80,6 @@ offset_right = -400.0
 grow_horizontal = 2
 grow_vertical = 2
 is_ui_button = true
-card_color = 5
 
 [node name="cards_left" type="Label" parent="deck" unique_id=319250200]
 unique_name_in_owner = true
@@ -109,7 +108,7 @@ offset_top = -322.0
 offset_bottom = -322.0
 grow_horizontal = 2
 is_ui_button = true
-card_color = 6
+card_color = 11
 
 [node name="win" type="Control" parent="." unique_id=1480261585]
 layout_mode = 1

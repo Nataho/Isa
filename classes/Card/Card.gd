@@ -7,6 +7,11 @@ const colors = [
 	Palette.Isa.GREEN, #green
 	Palette.Isa.BLUE, #blue
 	Color("000000ff"), #wild
+	Palette.IsaInverted.MINT,
+	Palette.IsaInverted.PURPLE,
+	Palette.IsaInverted.PINK,
+	Palette.IsaInverted.ORANGE,
+	Color("bdbdbdff")
 ]
 
 const sprite_reverse = preload("uid://dqqk6mkh1amna")
@@ -18,7 +23,11 @@ const sprite_skip = preload("uid://cpc8p8so3ku4o")
 const sprite_back_isa = preload("uid://bypgukcfs6r1q")
 const sprite_crown = preload("uid://cv06wpakl0u2b")
 
-enum CardColor { RED, YELLOW ,GREEN, BLUE, WILD, BACK, CROWN}
+enum CardColor { 
+	RED, YELLOW , GREEN, BLUE, WILD,
+	MINT, PURPLE, PINK, ORANGE, INVERTED_WILD,
+	BACK, CROWN,
+}
 enum CardType {
 	ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE,
 	SKIP, REVERSE, DRAW_TWO, DRAW_FOUR, COLOR, 
@@ -28,6 +37,7 @@ enum CardType {
 signal card_mouse_entered
 signal card_mouse_exited
 signal clicked
+signal held_click # ─── NEW SIGNAL ───
 
 @onready var base: ColorRect = $body/base
 @onready var border: TextureRect = $body/border
@@ -36,6 +46,7 @@ signal clicked
 @onready var mouse_listener: Control = $mouse_listener
 
 @export var is_ui_button: bool = false
+@export var is_holdable: bool = false # ─── NEW EXPORT VARIABLE ───
 @export var expand_on_hovered:bool = true
 @export var rotating:bool = false
 @export var card_color: CardColor
@@ -59,8 +70,18 @@ var is_hovering := false
 var clickable := false
 var initial_rotation := 0.0
 
+# ─── HOLD SYSTEM INTERNAL TRACKERS ───
+var _hold_start_time: int = 0
+var _is_holding: bool = false
+var _hold_id: int = 0
+var is_inverted: bool = false
+
 # ─── NEW FACE DOWN TRACKER ───
 var is_face_down: bool = false
+
+var _base_body_position: Vector2 = Vector2.ZERO
+var _current_lift: float = 0.0
+const MAX_LIFT: float = 40.0
 
 static func create(ID: int, color: CardColor, type: CardType) -> Card:
 	var obj: Card = FILE.instantiate()
@@ -103,7 +124,9 @@ func set_face_down(state: bool) -> void:
 		_initialize_card_art()
 
 func _ready() -> void:
-	# ─── PIVOT FIX FOR PERFECT 3D SPIN ───
+	# Store the original layout position of the body
+	_base_body_position = $body.position
+	
 	# Sync the root Control size with the visual body, then center the pivot
 	size = $body.size
 	pivot_offset = size / 2.0
@@ -117,13 +140,16 @@ func _ready() -> void:
 	await get_tree().create_timer(0.1).timeout
 
 func _process(delta: float) -> void:
+	# Calculate the 180-degree flip offset in radians
+	var rotation_offset := PI if is_inverted else 0.0
+
 	if discarded:
 		border.modulate = Color.WHITE
 		
 		if get_parent():
 			var target_pos = get_parent().global_position - (size / 2.0)
 			global_position = global_position.lerp(target_pos, 8 * delta)
-			rotation = lerp_angle(rotation, initial_rotation, 8 * delta)
+			rotation = lerp_angle(rotation, initial_rotation + rotation_offset, 8 * delta)
 	else:
 		# ─── VISUAL PLAYABILITY INDICATOR ───
 		if is_face_down or (hand and hand is NetworkHand):
@@ -147,9 +173,9 @@ func _process(delta: float) -> void:
 			var base_rot = deg_to_rad(hand.base_rotation_degrees) if hand else initial_rotation
 			
 			if is_hovering:
-				rotation = lerp_angle(rotation, 0.0, 10 * delta)
+				rotation = lerp_angle(rotation, 0.0 + rotation_offset, 10 * delta)
 			else:
-				rotation = lerp_angle(rotation, base_rot, 10 * delta)
+				rotation = lerp_angle(rotation, base_rot + rotation_offset, 10 * delta)
 			
 			# 3. Follow Scale (Properly scaled spinning!)
 			var target_scale = placeholder.scale
@@ -169,9 +195,16 @@ func _process(delta: float) -> void:
 				scale.x = sin(Time.get_ticks_msec() / 400.0) * abs(scale.y)
 
 			if is_hovering:
-				rotation = lerp_angle(rotation, 0.0, 10 * delta)
+				rotation = lerp_angle(rotation, 0.0 + rotation_offset, 10 * delta)
 			else:
-				rotation = lerp_angle(rotation, initial_rotation, 10 * delta)
+				rotation = lerp_angle(rotation, initial_rotation + rotation_offset, 10 * delta)
+		
+	var target_lift := MAX_LIFT if is_hovering else 0.0
+	_current_lift = lerp(_current_lift, target_lift, 10 * delta)
+	
+	# Vector(0, -_current_lift) is straight up on screen. 
+	# Rotating it by -rotation cancels out the card's rotation perfectly!
+	$body.position = _base_body_position + Vector2(0, -_current_lift).rotated(-rotation)
 
 func _connect_signals():
 	mouse_listener.mouse_entered.connect(_card_mouse_entered)
@@ -179,14 +212,45 @@ func _connect_signals():
 	mouse_listener.gui_input.connect(_on_mouse_listener_gui_input)
 
 func _on_mouse_listener_gui_input(event: InputEvent) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		
-		# ─── 1. UI BUTTON MODE: Just emit a signal and stop ───
+		# ─── 1. UI BUTTON MODE ───
 		if is_ui_button:
-			clicked.emit()
+			if event.is_pressed():
+				if is_holdable:
+					_is_holding = true
+					_hold_id += 1
+					var current_click_id = _hold_id
+					
+					# Wait exactly 1 second in the background
+					await get_tree().create_timer(1.0).timeout
+					
+					# If 1 second passed and we are STILL holding this exact click...
+					if _is_holding and _hold_id == current_click_id:
+						_is_holding = false # Unhold it immediately
+						held_click.emit()
+				else:
+					clicked.emit()
+			else: # Button Released
+				if is_holdable:
+					if _is_holding:
+						# If _is_holding is still true, they released BEFORE the 1 second mark!
+						_is_holding = false
+						clicked.emit()
+					else:
+						# They released AFTER the 1 second mark. 
+						# held_click already fired, so we safely do nothing here.
+						pass
 			return
 			
-		# ─── 2. NORMAL GAMEPLAY MODE ───
+		# ─── 2. NORMAL GAMEPLAY MODE (Only run on click presses) ───
+		if not event.is_pressed():
+			return
+			
+		# ─── 2. NORMAL GAMEPLAY MODE (Only run on click presses) ───
+		if not event.is_pressed():
+			return
+			
 		if discarded or is_face_down or (hand and hand is NetworkHand): 
 			return
 			
@@ -196,7 +260,7 @@ func _on_mouse_listener_gui_input(event: InputEvent) -> void:
 		
 		if clickable:
 			if is_playable():
-				if card_color == CardColor.WILD:
+				if card_color in [CardColor.WILD, CardColor.INVERTED_WILD]:
 					_process_wild_card_selection()
 				else:
 					request_play_card() 
@@ -206,34 +270,31 @@ func _on_mouse_listener_gui_input(event: InputEvent) -> void:
 func _process_wild_card_selection() -> void:
 	clickable = false
 	
-	var prompt = ColorPrompt.create(card_type)
+	var prompt = ColorPrompt.create(self)
 	hand.game_node.add_child(prompt)
 	
 	var chosen_color_index: int = await prompt.color_chosen
 	if chosen_color_index == -1:
 		prompt.queue_free()
 		clickable = true
-		return # Stop the function from playing the card
+		return 
 	
 	clickable = true
 	card_color = chosen_color_index as CardColor
 	_initialize_card_art()
-	request_play_card() # ─── CHANGED HERE ───
+	request_play_card() 
 
 func _trigger_wild_assert() -> void:
-	# Fulfilling instruction: A dedicated assert validation point when a wild card executes
 	assert(card_color == CardColor.WILD, "Dev Verification: Wild Card selection intercept active.")
 	print("Assert verified: Pausing gameplay sequence for user color response...")
 
 func request_play_card():
-	# This safely sends the card to the game logic without looping
 	if hand and hand.game_node:
 		var my_id = hand.game_node.my_lobby_id
 		hand.game_node._process_card_played(my_id, id, card_color, card_type)
 
 func discard():
 	discarded = true
-	# Automatically flip the card face up if it's played from a network hand!
 	if is_face_down:
 		set_face_down(false)
 	print("Visual discard triggered for card: ", id)
@@ -242,8 +303,6 @@ func is_playable() -> bool:
 	if not hand or not hand.game_node:
 		return true
 		
-	# ─── VISUAL TURN LOCK ───
-	# If it's not my turn, nothing in my hand is playable.
 	if hand.game_node.active_turn_lobby_id != hand.game_node.my_lobby_id:
 		return false
 		
@@ -251,6 +310,7 @@ func is_playable() -> bool:
 	
 	if not top_card: return true
 	if card_color == CardColor.WILD: return true
+	if card_color == CardColor.INVERTED_WILD: return true
 	if card_color == top_card.card_color: return true
 	if card_type == top_card.card_type: return true
 		
@@ -280,7 +340,6 @@ func _initialize_card_art() -> void:
 	card_action.texture = null
 	card_action.hide()
 	
-	# ─── OVERRIDE VISUALS IF FACE DOWN ───
 	if is_face_down or card_color == CardColor.BACK:
 		base.color = colors[CardColor.WILD]
 		card_action.texture = sprite_back_isa
@@ -347,19 +406,31 @@ func _card_mouse_entered():
 	card_mouse_entered.emit()
 	is_hovering = true
 	if placeholder:
-		$anim.play("rise")
+		# Removed $anim.play("rise") to let code handle the position
 		if expand_on_hovered:
 			placeholder.custom_minimum_size.x = 224
 			placeholder.size.x = 224
 	z_index += 1
 
 func _card_mouse_exited():
+	if _is_holding:
+		_is_holding = false
+		_hold_id += 1 
+		
 	if is_face_down and not is_ui_button: return
 	card_mouse_exited.emit()
 	is_hovering = false
 	if placeholder: 
-		$anim.play("fall")
+		# Removed $anim.play("fall") to let code handle the position
 		if expand_on_hovered:
 			placeholder.custom_minimum_size.x = 0
 			placeholder.size.x = 0
 	z_index -= 1
+
+func invert_rotation() -> void:
+	# Toggles the inverted state and shifts target angles by 180 degrees (PI radians)
+	is_inverted = true
+
+func reset_rotation() -> void:
+	# Forces the card back to its regular orientation
+	is_inverted = false

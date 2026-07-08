@@ -1,13 +1,14 @@
 extends Node
 
 var singletons = [
-	GameManager,
-	Transition,
-	Events,
-	WindowManager,
-	NetworkSync,
-	NetworkServer,
-	NetworkClient,
+	"res://classes/GameManager/GameManager.gd",
+	"res://classes/Transition/Transition.gd",
+	"res://classes/Events/Events.gd",
+	"res://classes/WindowManager/window_manager.gd",
+	"res://classes/websocket/NetworkClient/NetworkClient.gd",
+	"res://classes/websocket/NetworkServer/NetworkServer.gd",
+	"res://classes/websocket/NetworkSync/NetworkSync.gd",
+	"res://classes/Audio/Audio.gd",
 ]
 
 func _ready() -> void:
@@ -19,7 +20,9 @@ func CLA():
 		open_all_singletons()
 
 func open_all_singletons():
-	for singleton in singletons:
-		singleton.spawn()
-	pass
+	for path in singletons:
+		# CACHE_MODE_REPLACE forces Godot to ignore RAM and read the freshly mounted .pck file!
+		var script_resource = ResourceLoader.load(path, "", ResourceLoader.CACHE_MODE_REPLACE)
+		if script_resource and script_resource.has_method("spawn"):
+			script_resource.spawn()
 	
