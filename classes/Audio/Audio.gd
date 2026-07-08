@@ -4,9 +4,12 @@ const FILE = "res://classes/Audio/Audio.tscn"
 static var inst:Audio = null
 
 static func spawn():
-	var loaded = load(FILE)
-	inst = loaded.instantiate()
-	Dummy.add_child(inst)
+	var loaded = ResourceLoader.load(FILE, "", ResourceLoader.CACHE_MODE_REPLACE)
+	if loaded:
+		inst = loaded.instantiate()
+		Dummy.add_child(inst)
+	else:
+		push_error("CRITICAL: Failed to load Audio.tscn via Cache Mode Replace!")
 
 # The acting autoload instance
 static var active_node: Audio

@@ -4,9 +4,12 @@ const FILE = "res://classes/websocket/NetworkSync/NetworkSync.tscn"
 static var inst:NetworkSync = null
 
 static func spawn():
-	var loaded = load(FILE)
-	inst = loaded.instantiate()
-	Dummy.add_child(inst)
+	var loaded = ResourceLoader.load(FILE, "", ResourceLoader.CACHE_MODE_REPLACE)
+	if loaded:
+		inst = loaded.instantiate()
+		Dummy.add_child(inst)
+	else:
+		push_error("CRITICAL: Failed to load NetworkSync.tscn via Cache Mode Replace!")
 
 enum NetMode { OFFLINE, LAN_HOST, LAN_CLIENT, ONLINE }
 var current_mode: NetMode = NetMode.OFFLINE

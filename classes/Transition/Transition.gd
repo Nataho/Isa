@@ -3,9 +3,12 @@ const FILE = "res://classes/Transition/Transition.tscn"
 static var inst: Transition = null
 
 static func spawn():
-	var loaded = load(FILE)
-	inst = loaded.instantiate()
-	Dummy.add_child(inst)
+	var loaded = ResourceLoader.load(FILE, "", ResourceLoader.CACHE_MODE_REPLACE)
+	if loaded:
+		inst = loaded.instantiate()
+		Dummy.add_child(inst)
+	else:
+		push_error("CRITICAL: Failed to load Transition.tscn via Cache Mode Replace!")
 
 enum { DISSOLVE }
 enum Scenes { 

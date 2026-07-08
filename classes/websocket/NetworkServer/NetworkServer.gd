@@ -3,9 +3,12 @@ const FILE = "res://classes/websocket/NetworkServer/NetworkServer.tscn"
 static var inst:NetworkServer = null
 
 static func spawn():
-	var loaded = load(FILE)
-	inst = loaded.instantiate()
-	Dummy.add_child(inst)
+	var loaded = ResourceLoader.load(FILE, "", ResourceLoader.CACHE_MODE_REPLACE)
+	if loaded:
+		inst = loaded.instantiate()
+		Dummy.add_child(inst)
+	else:
+		push_error("CRITICAL: Failed to load NetworkServer.tscn via Cache Mode Replace!")
 
 var active_players: Array[Dictionary] = []
 

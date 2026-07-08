@@ -4,10 +4,12 @@ const FILE = "res://classes/GameManager/GameManager.tscn"
 static var inst:GameManager = null
 
 static func spawn():
-	var loaded = load(FILE)
-	inst = loaded.instantiate()
-	inst._early_setup()
-	Dummy.add_child(inst)
+	var loaded = ResourceLoader.load(FILE, "", ResourceLoader.CACHE_MODE_REPLACE)
+	if loaded:
+		inst = loaded.instantiate()
+		Dummy.add_child(inst)
+	else:
+		push_error("CRITICAL: Failed to load GameManager.tscn via Cache Mode Replace!")
 
 var _is_muted:bool = false
 var no_start := false

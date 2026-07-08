@@ -3,9 +3,12 @@ const FILE = "res://classes/Events/Events.tscn"
 static var inst: Events = null
 
 static func spawn():
-	var loaded = load(FILE)
-	inst = loaded.instantiate()
-	Dummy.add_child(inst)
+	var loaded = ResourceLoader.load(FILE, "", ResourceLoader.CACHE_MODE_REPLACE)
+	if loaded:
+		inst = loaded.instantiate()
+		Dummy.add_child(inst)
+	else:
+		push_error("CRITICAL: Failed to load Events.tscn via Cache Mode Replace!")
 	
 ### ─── LAN CONNECTION & LOBBY SIGNALS (From your network code) ───
 signal client_searching
