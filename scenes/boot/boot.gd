@@ -2,7 +2,7 @@ extends Control
 
 const SIMULATE_OFFLINE = false
 const JSON_URL = "https://nataho.github.io/Isa/patches.json"
-const BASE_VERSION = "0.1.26"
+const BASE_VERSION = "0.1.27"
 
 @onready var blink: Timer = $blink
 var _guide_transparent = false

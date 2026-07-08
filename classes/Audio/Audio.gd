@@ -22,26 +22,26 @@ var music_player_node: AudioStreamPlayer
 var stop_tween: Tween
 var start_tween: Tween
 
-const sound := {
+var sound := {
 	#sound name: [sound file, decibels]
-	"hover" : [preload("uid://du1gpeh7ocjna"), 0],
-	"confirm1": [preload("uid://ctnkg31uo1nu7"), 0],
-	"confirm2": [preload("uid://exuq8wros3g"), 0],
-	"confirm3": [preload("uid://dujj0q8vpaag"), 0],
+	"hover" : [load("res://assets/audio/sfx/hover.mp3"), 0],
+	"confirm1": [load("res://assets/audio/sfx/confirm1.mp3"), 0],
+	"confirm2": [load("res://assets/audio/sfx/confirm2.mp3"), 0],
+	"confirm3": [load("res://assets/audio/sfx/confirm3.mp3"), 0],
 	
-	"drawed": [preload("uid://b1m6dyhegke0p"), 0],
-	"skip": [preload("uid://cj0nf4f4augbf"), 0],
-	"reverse": [preload("uid://d34oxhs1tcw62"), 0],
-	"danger": [preload("uid://cj5xvd47cylsa"), 0],
-	"deal": [preload("uid://b12qc7ub4g8w7"), 0],
-	"scroll": [preload("uid://bvlcoeirgepgg"), 0]
+	"drawed": [load("res://assets/audio/sfx/drawed.wav"), 0],
+	"skip": [load("res://assets/audio/sfx/skip.mp3"), 0],
+	"reverse": [load("res://assets/audio/sfx/reverse.mp3"), 0],
+	"danger": [load("res://assets/audio/sfx/danger.wav"), 0],
+	"deal": [load("res://assets/audio/sfx/deal.mp3"), 0],
+	"scroll": [load("res://assets/audio/sfx/scroll.mp3"), 0]
 }
 
-const music := {
-	"main": [preload("uid://cj1gchuspy58a"), -5],
-	"lobby": [preload("uid://fcwr7jp08usi"), 0],
-	"victory": [preload("uid://q8xk1oxbh730"), 0], #FIXME: replace this lol
-	"battle": [preload("uid://l7cytvv1yxku"), 0], #FIXME: replace me
+var music := {
+	"main": [load("res://assets/audio/music/main_menu.mp3"), -5],
+	"lobby": [load("res://assets/audio/music/lobby.mp3"), 0],
+	"victory": [load("res://assets/audio/music/victory.mp3"), 0], #FIXME: replace this lol
+	"battle": [load("res://assets/audio/music/Tetris Chaos - Epic Battle.mp3"), 0], #FIXME: replace me
 }
 
 const MASTER_BUS = "Master"
