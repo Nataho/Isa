@@ -35,6 +35,7 @@ var is_game_over: bool = false
 
 var is_drawing_card: bool = false         # Client UI lock
 var _host_turn_draw_locked: bool = false  # Host Server lock
+var is_in_danger = false
 
 # ─── 1. INSTANTIATION ───
 static func create() -> Game:
@@ -99,8 +100,18 @@ func _process(delta: float) -> void:
 	
 	if turn_timer.time_left > 0 and not is_game_over:
 		turn_time_label.text = "Turn Time:\n" + str(ceil(turn_timer.time_left)) + "s"
+
+		# ─── ONLY TRIGGER IF IT IS YOUR TURN AND TIME < 10 ───
+		if active_turn_lobby_id == my_lobby_id and turn_timer.time_left < 10.0:
+			if not is_in_danger:
+				is_in_danger = true
+				_in_danger_loop()
+		else:
+			# Turn it off if time goes back up OR your turn ends
+			is_in_danger = false 
 	else:
 		turn_time_label.text = "Turn Time:\n0s"
+		is_in_danger = false
 	
 	if player_hands.has(active_turn_lobby_id):
 		var active_hand = player_hands[active_turn_lobby_id]
@@ -1039,3 +1050,10 @@ func _on_server_disconnected() -> void:
 	NetworkClient.stop()
 	GameManager.inst.reset_network_data()
 	Transition.change_scene(Transition.Scenes.MAIN, Transition.DISSOLVE)
+
+func _in_danger_loop():
+	if !is_in_danger: return
+	print("danger")
+	Audio.play_sound("danger")
+	await get_tree().create_timer(0.5).timeout
+	_in_danger_loop()
