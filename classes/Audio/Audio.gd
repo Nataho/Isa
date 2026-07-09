@@ -47,7 +47,7 @@ func _enter_tree() -> void:
 		"reverse": [load("res://assets/audio/sfx/reverse.mp3"), 0],
 		"danger": [load("res://assets/audio/sfx/danger.wav"), 0],
 		"deal": [load("res://assets/audio/sfx/deal.mp3"), 0],
-		#"scroll": [load("res://assets/audio/sfx/scroll.mp3"), 0]
+		"scroll": [load("res://assets/audio/sfx/scroll.mp3"), 0]
 	}
 
 	_music = {
