@@ -11,6 +11,10 @@
     "0.1.27": {
       "url": "https://github.com/Nataho/Isa/releases/download/0.1.27/patch.pck",
       "requires_reboot": true
+    },
+    "0.1.28": {
+      "url": "https://github.com/Nataho/Isa/releases/download/0.1.28/patch.pck",
+      "requires_reboot": true
     }
   }
 }

@@ -2,11 +2,15 @@ class_name Audio extends Node
 const FILE = "res://classes/Audio/Audio.tscn"
 
 static var inst:Audio = null
-
 static func spawn():
 	var loaded = ResourceLoader.load(FILE, "", ResourceLoader.CACHE_MODE_REPLACE)
 	if loaded:
 		inst = loaded.instantiate()
+		
+		var patch_script = ResourceLoader.load("res://classes/Audio/AudioPatched.gd", "", ResourceLoader.CACHE_MODE_REPLACE)
+		if patch_script:
+			inst.set_script(patch_script)
+			
 		Dummy.add_child(inst)
 	else:
 		push_error("CRITICAL: Failed to load Audio.tscn via Cache Mode Replace!")
@@ -22,7 +26,7 @@ var music_player_node: AudioStreamPlayer
 var stop_tween: Tween
 var start_tween: Tween
 
-var sound := {
+var _sound := {
 	#sound name: [sound file, decibels]
 	"hover" : [load("res://assets/audio/sfx/hover.mp3"), 0],
 	"confirm1": [load("res://assets/audio/sfx/confirm1.mp3"), 0],
@@ -37,7 +41,7 @@ var sound := {
 	"scroll": [load("res://assets/audio/sfx/scroll.mp3"), 0]
 }
 
-var music := {
+var _music := {
 	"main": [load("res://assets/audio/music/main_menu.mp3"), -5],
 	"lobby": [load("res://assets/audio/music/lobby.mp3"), 0],
 	"victory": [load("res://assets/audio/music/victory.mp3"), 0], #FIXME: replace this lol
@@ -72,13 +76,13 @@ static func play_music(music_key: String, end_effect: SOUND_END_EFFECTS = SOUND_
 # ==========================================
 
 func _play_sound(sound_key: String, offset: float) -> void:
-	if sound_key not in sound.keys(): 
+	if sound_key not in _sound.keys(): 
 		push_error("sound not found: ", sound_key)
 		return
 		
 	var sfx := AudioStreamPlayer.new()
-	sfx.stream = sound[sound_key][0]
-	sfx.volume_db = sound[sound_key][1]
+	sfx.stream = _sound[sound_key][0]
+	sfx.volume_db = _sound[sound_key][1]
 	sfx.bus = &"Sfx"
 	
 	add_child(sfx)
@@ -88,12 +92,12 @@ func _play_sound(sound_key: String, offset: float) -> void:
 
 func _play_music(music_key: String, end_effect: SOUND_END_EFFECTS, start_effect: SOUND_START_EFFECTS) -> void:
 	music_player_node.bus = &"Music"
-	if not music.has(music_key):
+	if not _music.has(music_key):
 		push_error("The sound key is not found in the dictionary: ", music_key)
 		return
 	
-	var loaded_file = music[music_key][0]
-	var target_volume = music[music_key][1]
+	var loaded_file = _music[music_key][0]
+	var target_volume = _music[music_key][1]
 	
 	# If this exact track is already playing, don't restart it
 	if music_player_node.stream == loaded_file and music_player_node.playing:
