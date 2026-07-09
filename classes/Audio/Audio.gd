@@ -2,15 +2,11 @@ class_name Audio extends Node
 const FILE = "res://classes/Audio/Audio.tscn"
 
 static var inst:Audio = null
+
 static func spawn():
 	var loaded = ResourceLoader.load(FILE, "", ResourceLoader.CACHE_MODE_REPLACE)
 	if loaded:
 		inst = loaded.instantiate()
-		
-		var patch_script = ResourceLoader.load("res://classes/Audio/AudioPatched.gd", "", ResourceLoader.CACHE_MODE_REPLACE)
-		if patch_script:
-			inst.set_script(patch_script)
-			
 		Dummy.add_child(inst)
 	else:
 		push_error("CRITICAL: Failed to load Audio.tscn via Cache Mode Replace!")
@@ -26,27 +22,9 @@ var music_player_node: AudioStreamPlayer
 var stop_tween: Tween
 var start_tween: Tween
 
-var _sound := {
-	#sound name: [sound file, decibels]
-	"hover" : [load("res://assets/audio/sfx/hover.mp3"), 0],
-	"confirm1": [load("res://assets/audio/sfx/confirm1.mp3"), 0],
-	"confirm2": [load("res://assets/audio/sfx/confirm2.mp3"), 0],
-	"confirm3": [load("res://assets/audio/sfx/confirm3.mp3"), 0],
-	
-	"drawed": [load("res://assets/audio/sfx/drawed.wav"), 0],
-	"skip": [load("res://assets/audio/sfx/skip.mp3"), 0],
-	"reverse": [load("res://assets/audio/sfx/reverse.mp3"), 0],
-	"danger": [load("res://assets/audio/sfx/danger.wav"), 0],
-	"deal": [load("res://assets/audio/sfx/deal.mp3"), 0],
-	"scroll": [load("res://assets/audio/sfx/scroll.mp3"), 0]
-}
-
-var _music := {
-	"main": [load("res://assets/audio/music/main_menu.mp3"), -5],
-	"lobby": [load("res://assets/audio/music/lobby.mp3"), 0],
-	"victory": [load("res://assets/audio/music/victory.mp3"), 0], #FIXME: replace this lol
-	"battle": [load("res://assets/audio/music/Tetris Chaos - Epic Battle.mp3"), 0], #FIXME: replace me
-}
+# 1. DECLARE THEM EMPTY HERE
+var _sound := {}
+var _music := {}
 
 const MASTER_BUS = "Master"
 const SFX_BUS = "Sfx"
@@ -57,6 +35,27 @@ func _enter_tree() -> void:
 	active_node = self
 	music_player_node = AudioStreamPlayer.new()
 	add_child(music_player_node)
+	
+	# 2. FILL THEM HERE! Godot cannot cache this.
+	_sound = {
+		"hover" : [load("res://assets/audio/sfx/hover.mp3"), 0],
+		"confirm1": [load("res://assets/audio/sfx/confirm1.mp3"), 0],
+		"confirm2": [load("res://assets/audio/sfx/confirm2.mp3"), 0],
+		"confirm3": [load("res://assets/audio/sfx/confirm3.mp3"), 0],
+		"drawed": [load("res://assets/audio/sfx/drawed.wav"), 0],
+		"skip": [load("res://assets/audio/sfx/skip.mp3"), 0],
+		"reverse": [load("res://assets/audio/sfx/reverse.mp3"), 0],
+		"danger": [load("res://assets/audio/sfx/danger.wav"), 0],
+		"deal": [load("res://assets/audio/sfx/deal.mp3"), 0],
+		#"scroll": [load("res://assets/audio/sfx/scroll.mp3"), 0]
+	}
+
+	_music = {
+		"main": [load("res://assets/audio/music/main_menu.mp3"), -5],
+		"lobby": [load("res://assets/audio/music/lobby.mp3"), 0],
+		"victory": [load("res://assets/audio/music/victory.mp3"), 0],
+		"battle": [load("res://assets/audio/music/Tetris Chaos - Epic Battle.mp3"), 0], 
+	}
 
 # ==========================================
 # STATIC WRAPPERS (Call these from anywhere!)
